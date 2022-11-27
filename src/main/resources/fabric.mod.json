@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "screenshotsettings",
+  "version": "${version}",
+  "name": "Screenshot Settings",
+  "description": "A mod for configuring where screenshots are stored, how they are named, and what information to include in their metadata.",
+  "authors": [
+    "fmbellomy"
+  ],
+  "license": "Apache-2.0",
+  "icon": "assets/ScreenshotSettings/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient"
+    ]
+  },
+  "mixins": [
+    "ScreenshotSettings.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.10",
+    "fabric-api": "*",
+    "minecraft": "~1.19",
+    "java": ">=17"
+  }
+}
