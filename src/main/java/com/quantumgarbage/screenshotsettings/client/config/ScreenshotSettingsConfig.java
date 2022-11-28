@@ -1,23 +1,27 @@
 package com.quantumgarbage.screenshotsettings.client.config;
 
+import com.google.gson.*;
 import dev.isxander.yacl.api.ConfigCategory;
 import dev.isxander.yacl.api.Option;
 import dev.isxander.yacl.api.OptionGroup;
 import dev.isxander.yacl.api.YetAnotherConfigLib;
 import dev.isxander.yacl.config.ConfigEntry;
-import dev.isxander.yacl.config.GsonConfigInstance;
 import dev.isxander.yacl.gui.controllers.BooleanController;
 import dev.isxander.yacl.gui.controllers.string.StringController;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ScreenshotSettingsConfig {
-    private static String templatingTooltip = "Available templates:\n    <timedate> -> The default Time and Date function.\n    <world> -> The name of the world in Single Player, and the name of the server in Multiplayer.\n    <version> -> The version of Minecraft the screenshot was taken on. (Ex. 1.19.2)\n    <coordinates> -> The XYZ coordinates the screenshot was taken at. Does not include player rotation.";
+    private static final String templatingTooltip = "Available templates:\n    <timedate> -> The default Time and Date function.\n    <world> -> The name of the world in Single Player, and the name of the server in Multiplayer.\n    <version> -> The version of Minecraft the screenshot was taken on. (Ex. 1.19.2)\n    <coordinates> -> The XYZ coordinates the screenshot was taken at. Does not include player rotation.";
 
     public static final Path configFile = FabricLoader.getInstance().getConfigDir().resolve("screenshot-settings.json");
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
+
     public static ScreenshotSettingsConfig INSTANCE = new ScreenshotSettingsConfig();
     // Change screenshot directory
     @ConfigEntry
@@ -37,7 +41,7 @@ public class ScreenshotSettingsConfig {
     @ConfigEntry
     public boolean shaderPack;
     @ConfigEntry
-    public boolean texturePack;
+    public boolean resourcePacks;
     @ConfigEntry
     public boolean seed;
 
@@ -47,15 +51,78 @@ public class ScreenshotSettingsConfig {
     @ConfigEntry
     public String screenshotNamingSchema;
 
-    public static void load() {
-        GsonConfigInstance<ScreenshotSettingsConfig> configInstance = new GsonConfigInstance<>(ScreenshotSettingsConfig.class, configFile);
-        configInstance.load();
-        INSTANCE = configInstance.getConfig();
-        if (INSTANCE.screenshotDirectory == null) {
-            INSTANCE.screenshotDirectory = "/screenshots";
+    public void load() {
+        try{
+            if(Files.notExists(configFile)){
+                save();
+                return;
+            }
+
+            JsonObject json = gson.fromJson(Files.readString(configFile), JsonObject.class);
+            if(json.has("screenshot_directory")){
+                screenshotDirectory = json.getAsJsonPrimitive("screenshot_directory").getAsString();
+            }
+            if(json.has("use_custom_screenshot_directory")){
+                useCustomScreenshotDirectory = json.getAsJsonPrimitive("use_custom_screenshot_directory").getAsBoolean();
+            }
+            if(json.has("use_metadata")){
+                useMetadata= json.getAsJsonPrimitive("use_metadata").getAsBoolean();
+            }
+            if(json.has("world_name")){
+                worldName = json.getAsJsonPrimitive("world_name").getAsBoolean();
+            }
+            if(json.has("mc_version")){
+                mcVersion = json.getAsJsonPrimitive("mc_version").getAsBoolean();
+            }
+            if(json.has("shader_pack")){
+                shaderPack = json.getAsJsonPrimitive("shader_pack").getAsBoolean();
+            }
+            if(json.has("resource_packs")){
+                resourcePacks = json.getAsJsonPrimitive("resource_packs").getAsBoolean();
+            }
+            if(json.has("seed")){
+                seed = json.getAsJsonPrimitive("seed").getAsBoolean();
+            }
+            if(json.has("use_custom_screenshot_naming_schema")){
+                useCustomScreenshotNamingSchema= json.getAsJsonPrimitive("use_custom_screenshot_naming_schema").getAsBoolean();
+            }
+            if(json.has("screenshot_naming_schema")){
+                screenshotNamingSchema = json.getAsJsonPrimitive("screenshot_naming_schema").getAsString();
+            }
+            if(screenshotNamingSchema == null){
+                screenshotNamingSchema = "<timedate>";
+            }
+            if(screenshotDirectory == null){
+                screenshotDirectory = "/screenshots";
+            }
         }
-        if (INSTANCE.screenshotNamingSchema == null) {
-            INSTANCE.screenshotNamingSchema = "<timedate>";
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    public void save() {
+        try {
+            Files.deleteIfExists(configFile);
+            JsonObject json = new JsonObject();
+            if(screenshotDirectory == null){
+                screenshotDirectory = "/screenshots";
+            }
+            if(screenshotNamingSchema == null){
+                screenshotNamingSchema = "<timedate>";
+            }
+            json.addProperty("screenshot_directory", screenshotDirectory);
+            json.addProperty("use_custom_screenshot_directory", useCustomScreenshotDirectory);
+            json.addProperty("use_metadata", useMetadata);
+            json.addProperty("world_name", worldName);
+            json.addProperty("mc_version", mcVersion);
+            json.addProperty("shader_pack", shaderPack);
+            json.addProperty("resource_packs", resourcePacks);
+            json.addProperty("seed", seed);
+            json.addProperty("use_custom_screenshot_naming_schema", useCustomScreenshotNamingSchema);
+            json.addProperty("screenshot_naming_schema",screenshotNamingSchema);
+            Files.writeString(configFile, gson.toJson(json));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -67,18 +134,8 @@ public class ScreenshotSettingsConfig {
         }
     }
 
-    public String getScreenshotNamingSchema() {
-        if (useCustomScreenshotNamingSchema) {
-            return screenshotNamingSchema;
-        } else {
-            return "<timedate>";
-        }
-    }
 
-    public void save() {
-        GsonConfigInstance<ScreenshotSettingsConfig> configInstance = new GsonConfigInstance<>(ScreenshotSettingsConfig.class, configFile);
-        configInstance.save();
-    }
+
 
     public Screen createGui(Screen parent) {
         ConfigCategory dirConfig = ConfigCategory.createBuilder()
@@ -149,8 +206,8 @@ public class ScreenshotSettingsConfig {
                                 .name(Text.of("Include Texture Pack"))
                                 .binding(
                                         false,
-                                        () -> INSTANCE.texturePack,
-                                        val -> INSTANCE.texturePack = val
+                                        () -> INSTANCE.resourcePacks,
+                                        val -> INSTANCE.resourcePacks = val
                                 ).controller(BooleanController::new)
                                 .build())
                         .option(Option.createBuilder(boolean.class)
@@ -202,7 +259,7 @@ public class ScreenshotSettingsConfig {
                 .category(dirConfig)
                 .category(metadata)
                 .category(screenshotNaming)
-                .save(this::save)
+                .save(INSTANCE::save)
                 .build()
                 .generateScreen(parent);
     }

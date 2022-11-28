@@ -13,7 +13,7 @@ public class ScreenshotSettingsClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        ScreenshotSettingsConfig.load();
+        ScreenshotSettingsConfig.INSTANCE.load();
         LOGGER.info("ScreenshotSettingsConfig loaded.");
 
     }

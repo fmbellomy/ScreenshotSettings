@@ -2,6 +2,8 @@ package com.quantumgarbage.screenshotsettings.util.getters;
 
 import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsConfig;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.Util;
@@ -15,10 +17,14 @@ public class GameMeta {
         if (MinecraftClient.getInstance().player == null) {
             return "Failed to get Coordinates (Screenshot appears to have been taken by a null player?)";
         }
-        double x = MinecraftClient.getInstance().player.getX();
-        double y = MinecraftClient.getInstance().player.getY();
-        double z = MinecraftClient.getInstance().player.getZ();
-        return String.format("X:[%.3f] Y:[%.3f] Z:[%.3f]", x, y, z);
+        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        double x = player.getX();
+        double y = player.getY();
+        double z = player.getZ();
+        double pitch = player.getPitch();
+        double yaw = player.getYaw();
+
+        return String.format("X:[%.3f] Y:[%.3f] Z:[%.3f] Pitch:[%.3f] Yaw:[%.3f]", x, y, z, pitch, yaw);
     }
 
     public static String getCoordinatesFilename() {
@@ -28,7 +34,7 @@ public class GameMeta {
         double x = MinecraftClient.getInstance().player.getX();
         double y = MinecraftClient.getInstance().player.getY();
         double z = MinecraftClient.getInstance().player.getZ();
-        return String.format("%.2f-%.2f-%.2f", x, y, z);
+        return String.format("[%.2f][%.2f][%.2f]", x, y, z);
     }
 
     private static String getWorldNameSinglePlayer() {
@@ -43,7 +49,11 @@ public class GameMeta {
 
     private static String getWorldNameMultiplayer() {
         try {
-            return MinecraftClient.getInstance().options.lastServer;
+            ServerInfo si = MinecraftClient.getInstance().getCurrentServerEntry();
+            if(si == null){
+                return "Couldn't get server name.";
+            }
+            return si.name;
         } catch (Exception e) {
             e.printStackTrace();
             return "Unable to get world name due to an error. [Multiplayer]";
@@ -113,7 +123,7 @@ public class GameMeta {
         if (ScreenshotSettingsConfig.INSTANCE.seed) {
             meta.put("World Seed", getSeed());
         }
-        if (ScreenshotSettingsConfig.INSTANCE.texturePack) {
+        if (ScreenshotSettingsConfig.INSTANCE.resourcePacks) {
             meta.put("Resource Packs", getResourcePacks());
         }
         if (ScreenshotSettingsConfig.INSTANCE.shaderPack && ShaderIntegration.irisPresent()) {
