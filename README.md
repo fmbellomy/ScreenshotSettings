@@ -11,11 +11,7 @@ singleplayer, the world seed.
 This should allow for convenient sorting/searching through screenshots by relevant metadata, and is also nice just for
 making your screenshots more accessible. (Seriously, I hate having to go into my AppData folder when I'm playing on
 Windows. It's terribly annoying.)
-## This mod may cause conflicts with other mods.
-This mod uses an @Overwrite mixin on the ScreenshotRecorder class. This is not good practice and is prone
-to causing conflict with other mods also implementing changes to how screenshots behave.
 
-When I rewrite this mixin (or someone else makes a pull request to fix it), I'll remove this disclaimer.
 ## This mod is incomplete.
 Here's a convenient checklist of what's been done.
 
