@@ -6,7 +6,7 @@
   "mixins": [
   ],
   "client": [
-    "ScreenshotDirectoryMixin"
+    "ScreenshotMixin"
   ],
   "injectors": {
     "defaultRequire": 1

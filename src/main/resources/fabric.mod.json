@@ -13,6 +13,9 @@
   "entrypoints": {
     "client": [
       "com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient"
+    ],
+    "modmenu": [
+      "com.quantumgarbage.screenshotsettings.integrations.ModMenuIntegration"
     ]
   },
   "mixins": [

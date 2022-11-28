@@ -19,11 +19,12 @@ implemented yet.
 Here's a convenient checklist of what's been done.
 
 - [x] Mixin to ScreenshotRecorder to gain control of where screenshots are saved and how they are named.
-- [ ] Implement an Options screen, likely through ClothConfigAPI or a similar library
+- [x] Implement an Options screen, likely through ClothConfigAPI or a similar library
 - [ ] File Explorer dialogue for choosing the new default screenshots directory
-- [ ] Implement system for manipulating PNG metadata
-- [ ] Getters for player position, rotation
-- [ ] Getters for world/server name, game version
-- [ ] Getter for active texture pack
+- [x] Implement system for manipulating PNG metadata
+- [x] Getters for player position, rotation
+- [x] Getters for world/server name, game version
+- [x] Getter for active texture pack
 - [ ] Getter for active shader pack (Iris integration maybe?)
-- [ ] Editor for filename schema
+- [x] Editor for filename schema
+- [ ] Apply filename schema with templating system
