@@ -14,9 +14,9 @@ import net.minecraft.text.Text;
 
 import java.nio.file.Path;
 
-public class ScreenshotSettings {
+public class ScreenshotSettingsConfig {
     public static final Path configFile = FabricLoader.getInstance().getConfigDir().resolve("screenshot-settings.json");
-    public static ScreenshotSettings INSTANCE = new ScreenshotSettings();
+    public static ScreenshotSettingsConfig INSTANCE = new ScreenshotSettingsConfig();
     // Change screenshot directory
     @ConfigEntry
     public String screenshotDirectory;
@@ -46,7 +46,7 @@ public class ScreenshotSettings {
     public String screenshotNamingSchema;
 
     public static void load() {
-        GsonConfigInstance<ScreenshotSettings> configInstance = new GsonConfigInstance<>(ScreenshotSettings.class, configFile);
+        GsonConfigInstance<ScreenshotSettingsConfig> configInstance = new GsonConfigInstance<>(ScreenshotSettingsConfig.class, configFile);
         configInstance.load();
         INSTANCE = configInstance.getConfig();
         if (INSTANCE.screenshotDirectory == null) {
@@ -74,7 +74,7 @@ public class ScreenshotSettings {
     }
 
     public void save() {
-        GsonConfigInstance<ScreenshotSettings> configInstance = new GsonConfigInstance<>(ScreenshotSettings.class, configFile);
+        GsonConfigInstance<ScreenshotSettingsConfig> configInstance = new GsonConfigInstance<>(ScreenshotSettingsConfig.class, configFile);
         configInstance.save();
     }
 

@@ -1,6 +1,6 @@
 package com.quantumgarbage.screenshotsettings.util.getters;
 
-import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettings;
+import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.server.integrated.IntegratedServer;
@@ -87,25 +87,25 @@ public class GameMeta {
 
     public static HashMap<String, String> getMetadata() {
         HashMap<String, String> meta = new HashMap<>();
-        if (!ScreenshotSettings.INSTANCE.useMetadata) {
+        if (!ScreenshotSettingsConfig.INSTANCE.useMetadata) {
             return meta;
         }
-        if (ScreenshotSettings.INSTANCE.coordinates) {
+        if (ScreenshotSettingsConfig.INSTANCE.coordinates) {
             meta.put("Coordinates", getCoordinates());
         }
-        if (ScreenshotSettings.INSTANCE.worldName) {
+        if (ScreenshotSettingsConfig.INSTANCE.worldName) {
             meta.put("World/Server Name", getWorldName());
         }
-        if (ScreenshotSettings.INSTANCE.seed) {
+        if (ScreenshotSettingsConfig.INSTANCE.seed) {
             meta.put("World Seed", getSeed());
         }
-        if (ScreenshotSettings.INSTANCE.texturePack) {
+        if (ScreenshotSettingsConfig.INSTANCE.texturePack) {
             meta.put("Resource Packs", getResourcePacks());
         }
-        if (ScreenshotSettings.INSTANCE.shaderPack && ShaderIntegration.irisPresent()) {
+        if (ScreenshotSettingsConfig.INSTANCE.shaderPack && ShaderIntegration.irisPresent()) {
             meta.put("Shader Pack", ShaderIntegration.get());
         }
-        if (ScreenshotSettings.INSTANCE.mcVersion) {
+        if (ScreenshotSettingsConfig.INSTANCE.mcVersion) {
             meta.put("Minecraft Version", getVersion());
         }
         return meta;

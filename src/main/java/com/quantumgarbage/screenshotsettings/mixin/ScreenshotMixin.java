@@ -1,7 +1,7 @@
 package com.quantumgarbage.screenshotsettings.mixin;
 
 
-import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettings;
+import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsConfig;
 import com.quantumgarbage.screenshotsettings.util.PNGMetadataManipulator;
 import com.quantumgarbage.screenshotsettings.util.getters.GameMeta;
 import net.minecraft.client.gl.Framebuffer;
@@ -46,7 +46,7 @@ public class ScreenshotMixin {
     }
     private static void saveScreenshotInner(File gameDirectory, @Nullable String fileName, Framebuffer framebuffer, Consumer<Text> messageReceiver) {
         NativeImage nativeImage = takeScreenshot(framebuffer);
-        String dir = ScreenshotSettings.INSTANCE.getScreenshotDirectory();
+        String dir = ScreenshotSettingsConfig.INSTANCE.getScreenshotDirectory();
         File file = new File(dir);
         //noinspection ResultOfMethodCallIgnored
         file.mkdir();
