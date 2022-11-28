@@ -52,62 +52,62 @@ public class ScreenshotSettingsConfig {
     public String screenshotNamingSchema;
 
     public void load() {
-        try{
-            if(Files.notExists(configFile)){
+        try {
+            if (Files.notExists(configFile)) {
                 save();
                 return;
             }
 
             JsonObject json = gson.fromJson(Files.readString(configFile), JsonObject.class);
-            if(json.has("screenshot_directory")){
+            if (json.has("screenshot_directory")) {
                 screenshotDirectory = json.getAsJsonPrimitive("screenshot_directory").getAsString();
             }
-            if(json.has("use_custom_screenshot_directory")){
+            if (json.has("use_custom_screenshot_directory")) {
                 useCustomScreenshotDirectory = json.getAsJsonPrimitive("use_custom_screenshot_directory").getAsBoolean();
             }
-            if(json.has("use_metadata")){
-                useMetadata= json.getAsJsonPrimitive("use_metadata").getAsBoolean();
+            if (json.has("use_metadata")) {
+                useMetadata = json.getAsJsonPrimitive("use_metadata").getAsBoolean();
             }
-            if(json.has("world_name")){
+            if (json.has("world_name")) {
                 worldName = json.getAsJsonPrimitive("world_name").getAsBoolean();
             }
-            if(json.has("mc_version")){
+            if (json.has("mc_version")) {
                 mcVersion = json.getAsJsonPrimitive("mc_version").getAsBoolean();
             }
-            if(json.has("shader_pack")){
+            if (json.has("shader_pack")) {
                 shaderPack = json.getAsJsonPrimitive("shader_pack").getAsBoolean();
             }
-            if(json.has("resource_packs")){
+            if (json.has("resource_packs")) {
                 resourcePacks = json.getAsJsonPrimitive("resource_packs").getAsBoolean();
             }
-            if(json.has("seed")){
+            if (json.has("seed")) {
                 seed = json.getAsJsonPrimitive("seed").getAsBoolean();
             }
-            if(json.has("use_custom_screenshot_naming_schema")){
-                useCustomScreenshotNamingSchema= json.getAsJsonPrimitive("use_custom_screenshot_naming_schema").getAsBoolean();
+            if (json.has("use_custom_screenshot_naming_schema")) {
+                useCustomScreenshotNamingSchema = json.getAsJsonPrimitive("use_custom_screenshot_naming_schema").getAsBoolean();
             }
-            if(json.has("screenshot_naming_schema")){
+            if (json.has("screenshot_naming_schema")) {
                 screenshotNamingSchema = json.getAsJsonPrimitive("screenshot_naming_schema").getAsString();
             }
-            if(screenshotNamingSchema == null){
+            if (screenshotNamingSchema == null) {
                 screenshotNamingSchema = "<timedate>";
             }
-            if(screenshotDirectory == null){
+            if (screenshotDirectory == null) {
                 screenshotDirectory = "/screenshots";
             }
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     public void save() {
         try {
             Files.deleteIfExists(configFile);
             JsonObject json = new JsonObject();
-            if(screenshotDirectory == null){
+            if (screenshotDirectory == null) {
                 screenshotDirectory = "/screenshots";
             }
-            if(screenshotNamingSchema == null){
+            if (screenshotNamingSchema == null) {
                 screenshotNamingSchema = "<timedate>";
             }
             json.addProperty("screenshot_directory", screenshotDirectory);
@@ -119,7 +119,7 @@ public class ScreenshotSettingsConfig {
             json.addProperty("resource_packs", resourcePacks);
             json.addProperty("seed", seed);
             json.addProperty("use_custom_screenshot_naming_schema", useCustomScreenshotNamingSchema);
-            json.addProperty("screenshot_naming_schema",screenshotNamingSchema);
+            json.addProperty("screenshot_naming_schema", screenshotNamingSchema);
             Files.writeString(configFile, gson.toJson(json));
         } catch (IOException e) {
             e.printStackTrace();
@@ -133,8 +133,6 @@ public class ScreenshotSettingsConfig {
             return FabricLoader.getInstance().getGameDir() + "/screenshots";
         }
     }
-
-
 
 
     public Screen createGui(Screen parent) {
@@ -212,6 +210,8 @@ public class ScreenshotSettingsConfig {
                                 .build())
                         .option(Option.createBuilder(boolean.class)
                                 .name(Text.of("Include Shader Pack (Requires Iris Shaders)"))
+                                .tooltip(Text.of("This option is still in development!"))
+                                .available(false)
                                 .binding(
                                         false,
                                         () -> INSTANCE.shaderPack,
