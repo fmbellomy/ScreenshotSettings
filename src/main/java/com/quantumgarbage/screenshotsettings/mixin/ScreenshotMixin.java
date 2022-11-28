@@ -2,6 +2,7 @@ package com.quantumgarbage.screenshotsettings.mixin;
 
 
 import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsConfig;
+import com.quantumgarbage.screenshotsettings.util.FileNameTemplateProcessor;
 import com.quantumgarbage.screenshotsettings.util.PNGMetadataManipulator;
 import com.quantumgarbage.screenshotsettings.util.getters.GameMeta;
 import net.minecraft.client.gl.Framebuffer;
@@ -29,21 +30,6 @@ public class ScreenshotMixin {
     @Final
     @Shadow
     private static Logger LOGGER;
-
-    // default in-game naming scheme.
-    private static File getScreenshotFilename(File directory) {
-        String string = Util.getFormattedCurrentTime();
-        int i = 1;
-
-        while (true) {
-            File file = new File(directory, string + (i == 1 ? "" : "_" + i) + ".png");
-            if (!file.exists()) {
-                return file;
-            }
-
-            ++i;
-        }
-    }
     private static void saveScreenshotInner(File gameDirectory, @Nullable String fileName, Framebuffer framebuffer, Consumer<Text> messageReceiver) {
         NativeImage nativeImage = takeScreenshot(framebuffer);
         String dir = ScreenshotSettingsConfig.INSTANCE.getScreenshotDirectory();
@@ -51,22 +37,24 @@ public class ScreenshotMixin {
         //noinspection ResultOfMethodCallIgnored
         file.mkdir();
         File file2;
-        if (fileName == null) {
-            file2 = getScreenshotFilename(file);
-        } else {
-            file2 = new File(file, fileName);
+        String filename = FileNameTemplateProcessor.format(ScreenshotSettingsConfig.INSTANCE.screenshotNamingSchema);
+        file2 = new File(file, filename);
+        int i = 1;
+        while (new File(file2 + ".png").exists()) {
+            ++i;
+            file2 = new File(file, filename + "_(" + i + ")");
         }
-
+        final File file3 = new File(file2 + ".png");
         Util.getIoWorkerExecutor().execute(() -> {
             try {
-                nativeImage.writeTo(file2);
-                Text text = Text.literal(file2.getName()).formatted(Formatting.UNDERLINE).styled((style) -> {
-                    return style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file2.getAbsolutePath()));
+                nativeImage.writeTo(file3);
+                Text text = Text.literal(file3.getName()).formatted(Formatting.UNDERLINE).styled((style) -> {
+                    return style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file3.getAbsolutePath()));
                 });
                 messageReceiver.accept(Text.translatable("screenshot.success", text));
-                LOGGER.info("Screenshot successfully saved to " + file2.getAbsolutePath() + "!");
+                LOGGER.info("Screenshot successfully saved to " + file3.getAbsolutePath() + "!");
 
-                PNGMetadataManipulator.attachMetadata(file2, GameMeta.getMetadata());
+                PNGMetadataManipulator.attachMetadata(file3, GameMeta.getMetadata());
 
             } catch (Exception var7) {
                 LOGGER.warn("Couldn't save screenshot", var7);

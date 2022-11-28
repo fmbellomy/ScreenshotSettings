@@ -4,6 +4,7 @@ import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsCon
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.util.Util;
 import net.minecraft.world.level.ServerWorldProperties;
 
 import java.util.HashMap;
@@ -18,7 +19,16 @@ public class GameMeta {
         double y = MinecraftClient.getInstance().player.getY();
         double z = MinecraftClient.getInstance().player.getZ();
         return String.format("X:[%.3f] Y:[%.3f] Z:[%.3f]", x, y, z);
+    }
 
+    public static String getCoordinatesFilename() {
+        if (MinecraftClient.getInstance().player == null) {
+            return "Failed to get Coordinates (Screenshot appears to have been taken by a null player?)";
+        }
+        double x = MinecraftClient.getInstance().player.getX();
+        double y = MinecraftClient.getInstance().player.getY();
+        double z = MinecraftClient.getInstance().player.getZ();
+        return String.format("%.2f-%.2f-%.2f", x, y, z);
     }
 
     private static String getWorldNameSinglePlayer() {
@@ -83,6 +93,10 @@ public class GameMeta {
 
     public static String getVersion() {
         return MinecraftClient.getInstance().getGame().getVersion().getName();
+    }
+
+    public static String timedate() {
+        return Util.getFormattedCurrentTime();
     }
 
     public static HashMap<String, String> getMetadata() {

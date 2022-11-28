@@ -15,6 +15,8 @@ import net.minecraft.text.Text;
 import java.nio.file.Path;
 
 public class ScreenshotSettingsConfig {
+    private static String templatingTooltip = "Available templates:\n    <timedate> -> The default Time and Date function.\n    <world> -> The name of the world in Single Player, and the name of the server in Multiplayer.\n    <version> -> The version of Minecraft the screenshot was taken on. (Ex. 1.19.2)\n    <coordinates> -> The XYZ coordinates the screenshot was taken at. Does not include player rotation.";
+
     public static final Path configFile = FabricLoader.getInstance().getConfigDir().resolve("screenshot-settings.json");
     public static ScreenshotSettingsConfig INSTANCE = new ScreenshotSettingsConfig();
     // Change screenshot directory
@@ -50,10 +52,10 @@ public class ScreenshotSettingsConfig {
         configInstance.load();
         INSTANCE = configInstance.getConfig();
         if (INSTANCE.screenshotDirectory == null) {
-            INSTANCE.screenshotDirectory = FabricLoader.getInstance().getGameDir() + "screenshots";
+            INSTANCE.screenshotDirectory = "/screenshots";
         }
         if (INSTANCE.screenshotNamingSchema == null) {
-            INSTANCE.screenshotNamingSchema = "%TIMEDATE%";
+            INSTANCE.screenshotNamingSchema = "<timedate>";
         }
     }
 
@@ -69,7 +71,7 @@ public class ScreenshotSettingsConfig {
         if (useCustomScreenshotNamingSchema) {
             return screenshotNamingSchema;
         } else {
-            return "%TIMEDATE%";
+            return "<timedate>";
         }
     }
 
@@ -81,26 +83,23 @@ public class ScreenshotSettingsConfig {
     public Screen createGui(Screen parent) {
         ConfigCategory dirConfig = ConfigCategory.createBuilder()
                 .name(Text.of("Screenshot Directory"))
-
+                .option(Option.createBuilder(boolean.class)
+                        .name(Text.of("Use Custom Screenshot Directory"))
+                        .tooltip(Text.of("Enabling this will set screenshots to be saved to the path specified in Custom Screenshot Directory"))
+                        .binding(
+                                false,
+                                () -> INSTANCE.useCustomScreenshotDirectory,
+                                val -> INSTANCE.useCustomScreenshotDirectory = val
+                        ).controller(BooleanController::new)
+                        .build())
                 .group(OptionGroup.createBuilder()
                         .name(Text.of("Screenshot Directory"))
                         .collapsed(false)
-
-                        .option(Option.createBuilder(boolean.class)
-                                .name(Text.of("Use Custom Screenshot Directory"))
-                                .tooltip(Text.of("Enabling this will set screenshots to be saved to the path specified in Custom Screenshot Directory"))
-                                .binding(
-                                        false,
-                                        () -> INSTANCE.useCustomScreenshotDirectory,
-                                        val -> INSTANCE.useCustomScreenshotDirectory = val
-                                ).controller(BooleanController::new)
-                                .build())
-
                         .option(Option.createBuilder(String.class)
                                 .name(Text.of("Custom Screenshot Directory"))
                                 .tooltip(Text.of("Where screenshots will be saved to, provided Use Custom Screenshot Directory is enabled."))
                                 .binding(
-                                        "./screenshots",
+                                        "/screenshots",
                                         () -> INSTANCE.screenshotDirectory,
                                         dir -> INSTANCE.screenshotDirectory = dir
 
@@ -183,13 +182,18 @@ public class ScreenshotSettingsConfig {
                                 val -> INSTANCE.useCustomScreenshotNamingSchema = val
                         ).controller(BooleanController::new)
                         .build())
-                .option(Option.createBuilder(String.class)
-                        .name(Text.of("Naming Schema"))
-                        .binding(
-                                "%TIMEDATE%",
-                                () -> INSTANCE.screenshotNamingSchema,
-                                val -> INSTANCE.screenshotNamingSchema = val
-                        ).controller(StringController::new)
+                .group(OptionGroup.createBuilder()
+                        .name(Text.of("Screenshot Naming Scheme"))
+                        .collapsed(false)
+                        .option(Option.createBuilder(String.class)
+                                .name(Text.of("Naming Schema"))
+                                .tooltip(Text.of(templatingTooltip))
+                                .binding(
+                                        "<timedate>",
+                                        () -> INSTANCE.screenshotNamingSchema,
+                                        val -> INSTANCE.screenshotNamingSchema = val
+                                ).controller(StringController::new)
+                                .build())
                         .build())
                 .build();
 

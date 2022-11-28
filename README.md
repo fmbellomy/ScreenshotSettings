@@ -27,4 +27,4 @@ Here's a convenient checklist of what's been done.
 - [x] Getter for active texture pack
 - [ ] Getter for active shader pack (Iris integration maybe?)
 - [x] Editor for filename schema
-- [ ] Apply filename schema with templating system
+- [x] Apply filename schema with templating system

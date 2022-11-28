@@ -4,6 +4,7 @@
   "package": "com.quantumgarbage.screenshotsettings.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "ScreenshotMixin"
   ],
   "client": [
     "ScreenshotMixin"
