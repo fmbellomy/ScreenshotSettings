@@ -17,7 +17,8 @@ Here's a convenient checklist of what's been done.
 
 - [x] Mixin to ScreenshotRecorder to gain control of where screenshots are saved and how they are named.
 - [x] Implement an Options screen, likely through ClothConfigAPI or a similar library
-- [ ] ~~File Explorer dialogue for choosing the new default screenshots directory~~ After a few hours of research, I've concluded that I have absolutely no idea how to implement this.
+- [ ] ~~File Explorer dialogue for choosing the new default screenshots directory~~
+- After a few hours of research, I've concluded that I have absolutely no idea how to implement this.
 - [x] Implement system for manipulating PNG metadata
 - [x] Getters for player position, rotation
 - [x] Getters for world/server name, game version
