@@ -9,7 +9,7 @@
   ],
   "license": "Apache-2.0",
   "icon": "assets/screenshotsettings/icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "client": [
       "com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient"

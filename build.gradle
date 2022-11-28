@@ -1,9 +1,10 @@
 plugins {
-    id 'fabric-loom' version '1.0-SNAPSHOT'
+    id 'fabric-loom' version '0.12.+'
     id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+sourceCompatibility = 17
+targetCompatibility = 17
 
 version = project.mod_version
 group = project.maven_group
@@ -34,11 +35,10 @@ dependencies {
     // YetAnotherConfigLib
     modImplementation "dev.isxander:yet-another-config-lib:1.7.1"
     // templating library for file naming system
-    implementation 'org.antlr:ST4:4.3.4'
+    shadow(implementation('org.antlr:ST4:4.3.4'))
 
 
 }
-
 processResources {
     inputs.property "version", project.version
     filteringCharset "UTF-8"
@@ -50,14 +50,21 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
-    it.options.release = 17
 }
 
 java {
     archivesBaseName = project.archives_base_name
     withSourcesJar()
 }
-
+shadowJar {
+    configurations = [project.configurations.shadow]
+    archiveClassifier.set("dev")
+    relocate "org.antlr", "com.quantumgarbage.screenshotsettings.shadow.org.antlr"
+}
+remapJar {
+    dependsOn(shadowJar)
+    inputFile = tasks.shadowJar.archiveFile
+}
 jar {
     from("LICENSE") {
         rename { "${it}_${project.archivesBaseName}" }

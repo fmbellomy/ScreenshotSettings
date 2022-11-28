@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import java.io.File;
@@ -30,6 +31,11 @@ public class ScreenshotMixin {
     @Final
     @Shadow
     private static Logger LOGGER;
+    /**
+     * @author fmbellomy
+     * @reason i suck at mixins and this was the easiest way to do what i needed to do.
+     */
+    @Overwrite
     private static void saveScreenshotInner(File gameDirectory, @Nullable String fileName, Framebuffer framebuffer, Consumer<Text> messageReceiver) {
         NativeImage nativeImage = takeScreenshot(framebuffer);
         String dir = ScreenshotSettingsConfig.INSTANCE.getScreenshotDirectory();
@@ -48,9 +54,7 @@ public class ScreenshotMixin {
         Util.getIoWorkerExecutor().execute(() -> {
             try {
                 nativeImage.writeTo(file3);
-                Text text = Text.literal(file3.getName()).formatted(Formatting.UNDERLINE).styled((style) -> {
-                    return style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file3.getAbsolutePath()));
-                });
+                Text text = Text.literal(file3.getName()).formatted(Formatting.UNDERLINE).styled((style) -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file3.getAbsolutePath())));
                 messageReceiver.accept(Text.translatable("screenshot.success", text));
                 LOGGER.info("Screenshot successfully saved to " + file3.getAbsolutePath() + "!");
 
