@@ -24,7 +24,7 @@ public class GameMeta {
         double pitch = player.getPitch();
         double yaw = player.getYaw();
 
-        return String.format("X:[%.3f] Y:[%.3f] Z:[%.3f] Pitch:[%.3f] Yaw:[%.3f]", x, y, z, pitch, yaw);
+        return String.format("X:[%.3f] Y:[%.3f] Z:[%.3f] Yaw:[%.3f] Pitch:[%.3f]", x, y, z, yaw, pitch);
     }
 
     public static String getCoordinatesFilename() {
