@@ -45,6 +45,7 @@ public class ScreenshotMixin {
         File file2;
         String filename = FileNameTemplateProcessor.format(ScreenshotSettingsConfig.INSTANCE.screenshotNamingSchema);
         file2 = new File(file, filename);
+        file2.getParentFile().mkdirs();
         int i = 1;
         while (new File(file2 + ".png").exists()) {
             ++i;
