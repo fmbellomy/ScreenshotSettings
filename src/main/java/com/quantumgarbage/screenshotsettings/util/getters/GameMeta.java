@@ -1,6 +1,7 @@
 package com.quantumgarbage.screenshotsettings.util.getters;
 
 import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsConfig;
+import com.quantumgarbage.screenshotsettings.integrations.ShaderIntegration;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ServerInfo;
@@ -127,7 +128,7 @@ public class GameMeta {
             meta.put("Resource Packs", getResourcePacks());
         }
         if (ScreenshotSettingsConfig.INSTANCE.shaderPack && ShaderIntegration.irisPresent()) {
-            meta.put("Shader Pack", ShaderIntegration.get());
+            meta.put("Shader Pack", ShaderIntegration.getShaderMeta());
         }
         if (ScreenshotSettingsConfig.INSTANCE.mcVersion) {
             meta.put("Minecraft Version", getVersion());

@@ -10,11 +10,17 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
     // Mod Menu
     maven { url "https://maven.terraformersmc.com/releases/" }
     // YetAnotherConfigLib
@@ -34,6 +40,8 @@ dependencies {
     modApi "com.terraformersmc:modmenu:4.1.1"
     // YetAnotherConfigLib
     modImplementation "dev.isxander:yet-another-config-lib:1.7.1"
+    // Iris Shaders integration
+    modImplementation "maven.modrinth:iris:1.19.2-v1.4.3"
     // templating library for file naming system
     shadow(implementation('org.antlr:ST4:4.3.4'))
 

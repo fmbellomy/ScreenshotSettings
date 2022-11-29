@@ -1,16 +1,15 @@
 package com.quantumgarbage.screenshotsettings.client.config;
 
 import com.google.gson.*;
-import dev.isxander.yacl.api.ConfigCategory;
-import dev.isxander.yacl.api.Option;
-import dev.isxander.yacl.api.OptionGroup;
-import dev.isxander.yacl.api.YetAnotherConfigLib;
+import dev.isxander.yacl.api.*;
 import dev.isxander.yacl.config.ConfigEntry;
+import dev.isxander.yacl.gui.controllers.ActionController;
 import dev.isxander.yacl.gui.controllers.BooleanController;
 import dev.isxander.yacl.gui.controllers.string.StringController;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
+import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -125,17 +124,17 @@ public class ScreenshotSettingsConfig {
             e.printStackTrace();
         }
     }
-
-    public String getScreenshotDirectory() {
-        if (useCustomScreenshotDirectory) {
-            return screenshotDirectory;
-        } else {
-            return FabricLoader.getInstance().getGameDir() + "/screenshots";
-        }
-    }
-
-
     public Screen createGui(Screen parent) {
+        Option<String> screenshotDirectory = Option.createBuilder(String.class)
+                .name(Text.of("Custom Screenshot Directory"))
+                .tooltip(Text.of("Where screenshots will be saved to, provided Use Custom Screenshot Directory is enabled."))
+                .binding(
+                        "/screenshots",
+                        () -> INSTANCE.screenshotDirectory,
+                        dir -> INSTANCE.screenshotDirectory = dir
+
+                ).controller(StringController::new)
+                .build();
         ConfigCategory dirConfig = ConfigCategory.createBuilder()
                 .name(Text.of("Screenshot Directory"))
                 .option(Option.createBuilder(boolean.class)
@@ -150,15 +149,15 @@ public class ScreenshotSettingsConfig {
                 .group(OptionGroup.createBuilder()
                         .name(Text.of("Screenshot Directory"))
                         .collapsed(false)
-                        .option(Option.createBuilder(String.class)
-                                .name(Text.of("Custom Screenshot Directory"))
-                                .tooltip(Text.of("Where screenshots will be saved to, provided Use Custom Screenshot Directory is enabled."))
-                                .binding(
-                                        "/screenshots",
-                                        () -> INSTANCE.screenshotDirectory,
-                                        dir -> INSTANCE.screenshotDirectory = dir
-
-                                ).controller(StringController::new)
+                        .option(screenshotDirectory)
+                        .option(ButtonOption.createBuilder()
+                                .name(Text.of("Choose Screenshots Folder"))
+                                .action(((yaclScreen, buttonOption) -> {
+                                    String currentSetting = screenshotDirectory.pendingValue();
+                                    String newDir = TinyFileDialogs.tinyfd_selectFolderDialog("Select New Screenshots Directory", currentSetting);
+                                    screenshotDirectory.requestSet(newDir);
+                                }))
+                                .controller((buttonOption) -> new ActionController(buttonOption, Text.of("Open File Dialog")))
                                 .build())
                         .build())
                 .build();
@@ -210,8 +209,6 @@ public class ScreenshotSettingsConfig {
                                 .build())
                         .option(Option.createBuilder(boolean.class)
                                 .name(Text.of("Include Shader Pack (Requires Iris Shaders)"))
-                                .tooltip(Text.of("This option is still in development!"))
-                                .available(false)
                                 .binding(
                                         false,
                                         () -> INSTANCE.shaderPack,
