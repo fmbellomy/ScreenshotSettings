@@ -8,6 +8,7 @@ import com.quantumgarbage.screenshotsettings.util.getters.GameMeta;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.util.ScreenshotRecorder;
 import net.minecraft.text.Text;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -38,14 +39,19 @@ public class ScreenshotMixin {
     )
     private static String filenameInject(String orig) {
         String filename = FileNameTemplateProcessor.format(ScreenshotSettingsConfig.INSTANCE.screenshotNamingSchema);
-        // base filename
-        String filenameChecked = filename + ".png";
-        // check if another file with the given name already exists.
-        // if it does, add a number suffix.
-        for (int i = 1; Files.exists(Path.of(filenameChecked)); ++i) {
-            filenameChecked = filename + "_" + i + ".png";
+        String dir = ScreenshotSettingsConfig.INSTANCE.getScreenshotDirectory();
+
+        int i = 1;
+        String tmp = filename;
+        while(true){
+            Path p = Path.of(dir + tmp + ".png");
+            if(!Files.exists(p)){
+                break;
+            }
+            tmp = filename + "_(" + i + ")";
+            ++i;
         }
-        return filenameChecked;
+        return tmp + ".png";
     }
 
     // inject into the lambda in Util.getServiceWorker.execute()
