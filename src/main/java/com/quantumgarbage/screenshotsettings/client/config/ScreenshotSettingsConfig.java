@@ -16,7 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ScreenshotSettingsConfig {
-    private static final String templatingTooltip = "Available templates:\n    <timedate> -> The default Time and Date function.\n    <world> -> The name of the world in Single Player, and the name of the server in Multiplayer.\n    <version> -> The version of Minecraft the screenshot was taken on. (Ex. 1.19.2)\n    <x>, <y>, and <z> -> The respective coordinates where the screenshot was taken from.\n    <shader> -> The active Shaderpack (requires Iris Shaders)";
+    private static final String templatingTooltip = "Available templates:\n    <datetime> -> The default screenshot naming format.\n    <world> -> The name of the world in Single Player, and the name of the server in Multiplayer.\n    <version> -> The version of Minecraft the screenshot was taken on. (Ex. 1.19.2)\n    <x>, <y>, and <z> -> The respective coordinates where the screenshot was taken from.\n    <shader> -> The active Shaderpack (requires Iris Shaders)";
 
     public static final Path configFile = FabricLoader.getInstance().getConfigDir().resolve("screenshot-settings.json");
     private final Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
