@@ -1,21 +1,22 @@
 package com.quantumgarbage.screenshotsettings.integrations;
 
-import net.coderbot.iris.config.IrisConfig;
+
 import net.fabricmc.loader.api.FabricLoader;
 import net.coderbot.iris.Iris;
+import org.apache.commons.io.FilenameUtils;
 
 public class ShaderIntegration {
     public static boolean irisPresent() {
         return FabricLoader.getInstance().isModLoaded("iris");
     }
 
-    public static String getShaderMeta() {
-        if (irisPresent()) {
-            IrisConfig cfg = Iris.getIrisConfig();
-            if (cfg.areShadersEnabled()) {
-                return cfg.getShaderPackName().orElse("Unnamed Shader Pack");
-            }
+    public static String getShaderName() {
+        if(irisPresent()) {
+            return Iris.getCurrentPackName();
         }
-        return "No Shaders in Use.";
+        return "Iris Shaders not found -- could not resolve shaderpack";
+    }
+    public static String getShaderNameNoExtension(){
+        return  FilenameUtils.removeExtension(getShaderName());
     }
 }

@@ -5,37 +5,31 @@ import com.quantumgarbage.screenshotsettings.integrations.ShaderIntegration;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ServerInfo;
+import net.minecraft.client.util.math.Vector3d;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.level.ServerWorldProperties;
 
 import java.util.HashMap;
 import java.util.Iterator;
 
 public class GameMeta {
-    public static String getCoordinates() {
-        if (MinecraftClient.getInstance().player == null) {
-            return "Failed to get Coordinates (Screenshot appears to have been taken by a null player?)";
+    public static String getCoordinatesMetadata() {
+        Vec3d pos = getCoordinates();
+        var p = MinecraftClient.getInstance().player;
+        if(pos == null || p == null){
+            return "Failed to get Coordinates due to an error.";
         }
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        double x = player.getX();
-        double y = player.getY();
-        double z = player.getZ();
-        double pitch = player.getPitch();
-        double yaw = player.getYaw();
-
-        return String.format("X:[%.3f] Y:[%.3f] Z:[%.3f] Yaw:[%.3f] Pitch:[%.3f]", x, y, z, yaw, pitch);
+        return String.format("X:[%.3f] Y:[%.3f] Z:[%.3f] Yaw:[%.3f] Pitch:[%.3f]", pos.x, pos.y, pos.z, p.getYaw(), p.getPitch());
     }
 
-    public static String getCoordinatesFilename() {
+    public static Vec3d getCoordinates() {
         if (MinecraftClient.getInstance().player == null) {
-            return "Failed to get Coordinates (Screenshot appears to have been taken by a null player?)";
+            return new Vec3d(0,0,0);
         }
-        double x = MinecraftClient.getInstance().player.getX();
-        double y = MinecraftClient.getInstance().player.getY();
-        double z = MinecraftClient.getInstance().player.getZ();
-        return String.format("[%.2f][%.2f][%.2f]", x, y, z);
+            return MinecraftClient.getInstance().player.getPos();
     }
 
     private static String getWorldNameSinglePlayer() {
@@ -116,7 +110,7 @@ public class GameMeta {
             return meta;
         }
         if (ScreenshotSettingsConfig.INSTANCE.coordinates) {
-            meta.put("Coordinates", getCoordinates());
+            meta.put("Coordinates", getCoordinatesMetadata());
         }
         if (ScreenshotSettingsConfig.INSTANCE.worldName) {
             meta.put("World/Server Name", getWorldName());
@@ -128,7 +122,7 @@ public class GameMeta {
             meta.put("Resource Packs", getResourcePacks());
         }
         if (ScreenshotSettingsConfig.INSTANCE.shaderPack && ShaderIntegration.irisPresent()) {
-            meta.put("Shader Pack", ShaderIntegration.getShaderMeta());
+            meta.put("Shader Pack", ShaderIntegration.getShaderName());
         }
         if (ScreenshotSettingsConfig.INSTANCE.mcVersion) {
             meta.put("Minecraft Version", getVersion());
