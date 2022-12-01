@@ -13,9 +13,9 @@ concurrency:
 
 jobs:
   build-and-publish:
-    runs-on: ubuntu-latest
     steps:
       - build:
+          runs-on: ubuntu-latest
           matrix:
             java-version: 17
           steps:
