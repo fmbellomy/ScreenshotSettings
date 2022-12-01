@@ -28,6 +28,9 @@ jobs:
       - name: Publish to MR and GH
         uses: Kir-Antipov/mc-publish@v3.2
         with:
+          loaders: [ fabric, quilt ]
+          game-versions: 1.19.2
+          dependencies: [ ]
           modrinth-id: M0QvZmyL
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
