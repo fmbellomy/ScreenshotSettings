@@ -19,6 +19,9 @@ jobs:
             java-version: 17
       -   name: Grant execute permission for gradlew
           run: chmod +x gradlew
+          # I seriously shouldn't have to do this, but I'm at a loss with these failed GH actions at this point.
+      -   name: Generate Gradle Wrapper
+          run: gradle wrapper --gradle-version 7.4
       -   name: Build with Gradle
           run: ./gradlew build
 
