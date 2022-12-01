@@ -1,0 +1,23 @@
+name: 'mc-publish'
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - mistress
+  pull_request:
+
+# This allows a subsequently queued workflow run to interrupt previous runs
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Kir-Antipov/mc-publish@v3.2
+        with:
+          modrinth-id: M0QvZmyL
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          
+          github-token: ${{ secrets.GITHUB_TOKEN }}
