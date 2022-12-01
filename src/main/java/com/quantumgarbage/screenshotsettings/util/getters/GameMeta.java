@@ -1,12 +1,10 @@
 package com.quantumgarbage.screenshotsettings.util.getters;
 
-import com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient;
 import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsConfig;
 import com.quantumgarbage.screenshotsettings.integrations.ShaderIntegration;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.util.math.Vector3d;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.Util;
