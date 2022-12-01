@@ -1,6 +1,6 @@
 # Screenshot Settings
 
-ScreenshotSettings is a mod for Fabric (and hopefully Quilt, but I haven't tested it yet) that allows you to configure
+ScreenshotSettings is a mod for Quilt/Fabric that allows you to configure
 various things about in-game screenshots.
 
 "Various Things" includes choosing where screenshots are saved to on-disk, as well as how you'd like them to be named.
@@ -12,17 +12,90 @@ This should allow for convenient sorting/searching through screenshots by releva
 making your screenshots more accessible. (Seriously, I hate having to go into my AppData folder when I'm playing on
 Windows. It's terribly annoying.)
 
-## This mod is complete, but a little gross under the hood and possibly unstable.
-Here's a convenient checklist of what's been done.
+## Things you can do with the custom File Naming system.
+The file naming system is somewhat bare bones at the moment, only supporting 8 templates.
 
-- [x] Mixin to ScreenshotRecorder to gain control of where screenshots are saved and how they are named.
-- [x] Implement an Options screen, likely through ClothConfigAPI or a similar library
-- [x] Implement system for manipulating PNG metadata
-- [x] Metadata for player position, yaw, pitch
-- [x] Metadata for world/server name, game version
-- [x] Metadata for active texture pack
-- [x] Editor for filename schema
-- [x] Apply filename schema with templating system
-- [x] File Explorer dialogue for choosing the new default screenshots directory
-- [x] Metadata for active shader pack with Iris Shaders
-- [ ] Config Rewrite (While the config system technically works, it's horribly written and prone to confusing crashes if the json somehow becomes malformed.)
+- `<datetime>`
+  - Minecraft's default screenshot naming format.
+  - (*This may be changed in the future to support more customizable formatting, like having separate tags for `<month> <day> <hour> <minute> <second>`*)
+- `<world>`
+  - The name of the world in Single Player, and the name of the server in Multiplayer.
+- `<version>`
+  - The version of Minecraft the screenshot was taken on. (Ex. 1.19.2)
+- `<x>`, `<y>`, and `<z>`
+  - The respective coordinates of where the screenshot was taken.
+- `<shader>`
+  - The active Shader pack. (requires Iris Shaders)
+- `<player>`
+  - Your Minecraft username. Useful for if you want to put screenshots from multiple accounts in the same place but keep them organized. (Not entirely sure why you would want to do that, but the point of this mod is to give you options, damnit!)
+### Automatically Creating Subdirectories
+By including a `/` in your naming scheme, you can create a directory structure based on the templates above.
+
+You can automatically organize your screenshots into folders according to what world/server they were taken on, or what shaderpack was in use at the time of the screenshot.
+
+My favorite naming scheme is `<world>/<datetime>` because it gives me all the organizational structure I really need, as well as being effective at preventing naming collisions.
+
+This results in a directory structure like the following
+
+```
+~/Pictures/minecraft
+----------------------------------------------------------------
+    ├── annier server
+    │   ├── 2022-11-29_19.42.52.png
+    │   ├── 2022-11-29_19.45.30.png
+    │   ├── 2022-11-30_14.08.32.png
+    │   ├── 2022-11-30_14.21.56.png
+    │   ├── 2022-11-30_17.11.26.png
+    │   ├── 2022-11-30_21.07.27.png
+    │   ├── 2022-11-30_21.07.53.png
+    │   ├── 2022-11-30_21.35.16.png
+    │   ├── 2022-11-30_21.39.00.png
+    │   ├── 2022-11-30_21.39.20.png
+    │   ├── 2022-11-30_21.46.19.png
+    │   └── 2022-11-30_23.42.15.png
+    ├── Example Server
+    │   ├── 2022-11-28_19.42.15.png
+    │   └── 2022-11-28_19.30.06.png
+    └── Quilt Test
+        └── 2022-11-28_18.36.38.png
+```
+If you, however, were to have many servers saved as "Minecraft Server" and many singleplayer worlds named "New World", this wouldn't do much to help you.
+## A note on PNG Metadata
+The Windows Explorer cannot display the metadata included by this mod. You will need to get a dedicated program for windows to be able to see it.
+
+To be frank, the existing solutions for viewing PNG metadata on Windows are somewhat disappointing. I may make a standalone tool for this in the future just to get something more accessible out there.
+### Viewing Metadata: CLI
+If you're comfortable using a command-line tool, you can use [ImageMagick](https://imagemagick.org/)'s `identify --verbose` command to see it.
+
+ImageMagick has releases for Windows, Mac, and Linux, and if you're on Linux chances are you already have it installed anyway.
+
+This is the way I'd recommend, because it allows you to set up scripts for searching through or organizing your screenshots, but if all you're interested in is *viewing* metadata, perhaps you'd be more interested in a GUI.
+
+#### An option for any weirdos out there like myself - (WSL).
+Because Minecraft uses URIs to resolve file paths on Windows, you can actually use the path to an installed WSL distribution as a valid save location to make manipulating your screenshot collection via WSL more convenient.
+
+![Using WSL as a save destination](examples/wsl%20as%20a%20save%20destination.png)
+
+### Viewing Metadata: GUI
+If you *aren't* comfortable using a command-line tool... the best way I've found (on Windows, at least) is [exiftoolgui](https://exiftool.org/gui/).
+
+![ExifToolGUI in action.](examples/ExiftoolGUI.png)
+
+It requires that you have the base [exiftool](https://exiftool.org) installed, but the "default" installation process for it isn't very user-friendly.
+For installing the base tool, I recommend Oliver Betz's [exiftool for windows](https://oliverbetz.de/pages/Artikel/ExifTool-for-Windows). 
+It comes packaged with a GUI installer and is just generally more convenient.
+
+Once installed, you'll want to navigate to your screenshot and view the `All` tab to see all of its metadata. 
+The metadata attached by this mod should appear at the bottom, as it does in the screenshot above. 
+
+## DISCLAIMER FOR MODPACK DEVELOPERS!
+**MAKE SURE** that you do not accidentally ship any custom config you might have for this mod to users. Add it to a .gitignore or something,
+just be careful that you don't end up making it so other people's games try saving screenshots to arbitrary non-existent directories.
+
+I intend on eventually adding a way for the mod to detect that it is being run on a new unique machine for the first time, but I haven't decided how to implement that yet. For now, just don't ship your config.
+
+## A final note for any potential contributors:
+This is my first serious attempt at a mod. You will find code that looks pretty gross in there.
+The worst offender is the config system. It's liable to crash the game if the config file is ever manually edited outside the in-game menu.
+
+I would entirely appreciate pull requests if you have a bug fix, optimization, or feature you'd like to add.
