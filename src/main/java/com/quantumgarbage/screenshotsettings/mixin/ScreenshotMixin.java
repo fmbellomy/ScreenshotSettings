@@ -1,6 +1,7 @@
 package com.quantumgarbage.screenshotsettings.mixin;
 
 
+import com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient;
 import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsConfig;
 import com.quantumgarbage.screenshotsettings.util.FileNameTemplateProcessor;
 import com.quantumgarbage.screenshotsettings.util.PNGMetadataManipulator;
@@ -71,6 +72,6 @@ public class ScreenshotMixin {
             locals = LocalCapture.CAPTURE_FAILEXCEPTION
     )
     private static void attachMetadata(NativeImage nativeImage, File file, Consumer<Text> consumer, CallbackInfo ci) {
-        PNGMetadataManipulator.attachMetadata(file, GameMeta.getMetadata());
+        PNGMetadataManipulator.attachMetadata(file, GameMeta.getMetadata(ScreenshotSettingsClient.client));
     }
 }
