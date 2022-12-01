@@ -31,6 +31,12 @@ public class GameMeta {
         }
             return MinecraftClient.getInstance().player.getPos();
     }
+    public static String getPlayerName(){
+        if (MinecraftClient.getInstance().player != null) {
+            return MinecraftClient.getInstance().player.getEntityName();
+        }
+        else return "Unable to get player name due to an error.";
+    }
 
     private static String getWorldNameSinglePlayer() {
         try {
