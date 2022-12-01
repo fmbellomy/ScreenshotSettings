@@ -15,9 +15,25 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: Kir-Antipov/mc-publish@v3.2
-        with:
-          modrinth-id: M0QvZmyL
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+      - build:
+          matrix:
+            java-version: 17
+          steps:
+            - uses: actions/checkout@v2
+            - name: Set up JDK ${{ java-version }}
+              uses: actions/setup-java@v2
+              with:
+                java-version: ${{ java-version }}
+                distribution: 'adopt'
+                cache: gradle
+            - name: Grant execute permission for gradlew
+              run: chmod +x gradlew
+            - name: Build with Gradle
+              run: ./gradlew build
+      - publish:
+        - uses: Kir-Antipov/mc-publish@v3.2
+          with:
+            modrinth-id: M0QvZmyL
+            modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+            github-token: ${{ secrets.GITHUB_TOKEN }}
