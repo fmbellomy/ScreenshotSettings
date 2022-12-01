@@ -1,5 +1,6 @@
 package com.quantumgarbage.screenshotsettings.util.getters;
 
+import com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient;
 import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsConfig;
 import com.quantumgarbage.screenshotsettings.integrations.ShaderIntegration;
 import net.minecraft.client.MinecraftClient;
@@ -16,94 +17,75 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class GameMeta {
-    public static String getCoordinatesMetadata() {
-        Vec3d pos = getCoordinates();
-        var p = MinecraftClient.getInstance().player;
-        if(pos == null || p == null){
-            return "Failed to get Coordinates due to an error.";
-        }
+    public static String getCoordinatesMetadata(MinecraftClient client) {
+        final var p = client.player;
+        assert p != null;
+        final Vec3d pos = getCoordinates(p);
         return String.format("X:[%.3f] Y:[%.3f] Z:[%.3f] Yaw:[%.3f] Pitch:[%.3f]", pos.x, pos.y, pos.z, p.getYaw(), p.getPitch());
     }
 
-    public static Vec3d getCoordinates() {
-        if (MinecraftClient.getInstance().player == null) {
-            return new Vec3d(0,0,0);
-        }
-            return MinecraftClient.getInstance().player.getPos();
-    }
-    public static String getPlayerName(){
-        if (MinecraftClient.getInstance().player != null) {
-            return MinecraftClient.getInstance().player.getEntityName();
-        }
-        else return "Unable to get player name due to an error.";
+    public static Vec3d getCoordinates(ClientPlayerEntity p) {
+        assert p != null;
+        return p.getPos();
     }
 
-    private static String getWorldNameSinglePlayer() {
-        try {
-            ServerWorldProperties sprops = (ServerWorldProperties) MinecraftClient.getInstance().getServer().getWorlds().iterator().next().getLevelProperties();
-            return sprops.getLevelName();
-        } catch (NullPointerException npe) {
-            npe.printStackTrace();
-            return "Unable to get world name due to an error. [Single Player]";
-        }
+    public static String getPlayerName(MinecraftClient client) {
+        assert client.player != null;
+        return client.player.getEntityName();
     }
 
-    private static String getWorldNameMultiplayer() {
-        try {
-            ServerInfo si = MinecraftClient.getInstance().getCurrentServerEntry();
-            if(si == null){
-                return "Couldn't get server name.";
-            }
-            return si.name;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Unable to get world name due to an error. [Multiplayer]";
-        }
+    private static String getWorldNameSinglePlayer(MinecraftClient client) {
+
+        assert client.getServer() != null;
+        final ServerWorldProperties worldProperties = (ServerWorldProperties) client.getServer().getWorlds().iterator().next().getLevelProperties();
+        return worldProperties.getLevelName();
+
+
     }
 
-    public static String getWorldName() {
-        if (isSinglePlayer()) {
-            return getWorldNameSinglePlayer();
+    private static String getWorldNameMultiplayer(MinecraftClient client) {
+        final ServerInfo si = client.getCurrentServerEntry();
+        assert si != null;
+        return si.name;
+
+    }
+
+    public static String getWorldName(MinecraftClient client) {
+        if (isSinglePlayer(client)) {
+            return getWorldNameSinglePlayer(client);
         } else {
-            return getWorldNameMultiplayer();
+            return getWorldNameMultiplayer(client);
         }
     }
 
-    public static String getSeed() {
-        if (isSinglePlayer()) {
-            IntegratedServer server = MinecraftClient.getInstance().getServer();
-            if (server == null) {
-                return "Unable to get world seed due to an error.";
-            }
+    public static String getSeed(MinecraftClient client) {
+        if (isSinglePlayer(client)) {
+            final IntegratedServer server = client.getServer();
+            assert server != null;
             return Long.toString(server.getWorlds().iterator().next().getSeed());
         }
-        return "Screenshot taken in Multiplayer -- Seed Unknown"; //TODO
+        return "Screenshot taken in Multiplayer -- Seed Unknown";
     }
 
-    private static boolean isSinglePlayer() {
-        return MinecraftClient.getInstance().isInSingleplayer();
+    private static boolean isSinglePlayer(MinecraftClient client) {
+        return client.isInSingleplayer();
     }
 
-    public static String getResourcePacks() {
-        StringBuilder base = new StringBuilder("[");
-        try {
-            Iterator<ResourcePack> resourcePackIterator = MinecraftClient.getInstance().getResourceManager().streamResourcePacks().iterator();
-            while (resourcePackIterator.hasNext()) {
-                base.append(String.format("%s", resourcePackIterator.next().getName()));
-                if (resourcePackIterator.hasNext()) {
-                    base.append(", ");
-                }
+    public static String getResourcePacks(MinecraftClient client) {
+        final StringBuilder base = new StringBuilder("[");
+        final Iterator<ResourcePack> resourcePackIterator = client.getResourceManager().streamResourcePacks().iterator();
+        while (resourcePackIterator.hasNext()) {
+            base.append(String.format("%s", resourcePackIterator.next().getName()));
+            if (resourcePackIterator.hasNext()) {
+                base.append(", ");
             }
-            base.append("]");
-            return base.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Unable to get active resource packs due to an error.";
         }
+        base.append("]");
+        return base.toString();
     }
 
-    public static String getVersion() {
-        return MinecraftClient.getInstance().getGame().getVersion().getName();
+    public static String getVersion(MinecraftClient client) {
+        return client.getGame().getVersion().getName();
     }
 
     public static String timedate() {
@@ -111,27 +93,28 @@ public class GameMeta {
     }
 
     public static HashMap<String, String> getMetadata() {
-        HashMap<String, String> meta = new HashMap<>();
+        final MinecraftClient client = ScreenshotSettingsClient.client;
+        final HashMap<String, String> meta = new HashMap<>();
         if (!ScreenshotSettingsConfig.INSTANCE.useMetadata) {
             return meta;
         }
         if (ScreenshotSettingsConfig.INSTANCE.coordinates) {
-            meta.put("Coordinates", getCoordinatesMetadata());
+            meta.put("Coordinates", getCoordinatesMetadata(client));
         }
         if (ScreenshotSettingsConfig.INSTANCE.worldName) {
-            meta.put("World/Server Name", getWorldName());
+            meta.put("World/Server Name", getWorldName(client));
         }
         if (ScreenshotSettingsConfig.INSTANCE.seed) {
-            meta.put("World Seed", getSeed());
+            meta.put("World Seed", getSeed(client));
         }
         if (ScreenshotSettingsConfig.INSTANCE.resourcePacks) {
-            meta.put("Resource Packs", getResourcePacks());
+            meta.put("Resource Packs", getResourcePacks(client));
         }
         if (ScreenshotSettingsConfig.INSTANCE.shaderPack && ShaderIntegration.irisPresent()) {
             meta.put("Shader Pack", ShaderIntegration.getShaderName());
         }
         if (ScreenshotSettingsConfig.INSTANCE.mcVersion) {
-            meta.put("Minecraft Version", getVersion());
+            meta.put("Minecraft Version", getVersion(client));
         }
         return meta;
     }
