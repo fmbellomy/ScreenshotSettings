@@ -10,6 +10,11 @@
   "license": "Apache-2.0",
   "icon": "assets/screenshotsettings/icon.png",
   "environment": "client",
+  "custom": {
+    "mc-publish": {
+      "quilt": true
+    }
+  },
   "entrypoints": {
     "client": [
       "com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient"
