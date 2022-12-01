@@ -29,6 +29,11 @@ jobs:
         uses: Kir-Antipov/mc-publish@v3.2
         with:
           game-versions: 1.19.2
+          modrinth-dependencies: |
+            yacl | depends 
+            modmenu | depends
+            fabric-api | depends
+            iris | suggests
           modrinth-id: M0QvZmyL
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
