@@ -8,13 +8,14 @@ import org.stringtemplate.v4.ST;
 
 
 public class FileNameTemplateProcessor {
-    public static String format(String templateString) {
-        MinecraftClient client = ScreenshotSettingsClient.client;
-        ST nameBuilder = new ST(templateString);
+    public static String format(final String templateString) {
+        final MinecraftClient client = ScreenshotSettingsClient.client;
+        final ST nameBuilder = new ST(templateString);
 
         nameBuilder.add("datetime", GameMeta.timedate());
         nameBuilder.add("version", GameMeta.getVersion(client));
         nameBuilder.add("world", GameMeta.getWorldName(client));
+        assert null != client.player;
         nameBuilder.add("x", String.format("%.0f",GameMeta.getCoordinates(client.player).x));
         nameBuilder.add("y", String.format("%.0f",GameMeta.getCoordinates(client.player).y));
         nameBuilder.add("z", String.format("%.0f",GameMeta.getCoordinates(client.player).z));

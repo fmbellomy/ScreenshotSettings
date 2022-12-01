@@ -22,25 +22,26 @@ public class PNGMetadataManipulator {
     // These first two methods are proudly stolen from Stack Overflow.
     private static void addTextEntry(final IIOMetadata metadata, final String key, final String value)
             throws IIOInvalidTreeException {
-        IIOMetadataNode textEntry = new IIOMetadataNode("TextEntry");
+        final IIOMetadataNode textEntry = new IIOMetadataNode("TextEntry");
         textEntry.setAttribute("keyword", key);
         textEntry.setAttribute("value", value);
 
-        IIOMetadataNode text = new IIOMetadataNode("Text");
+        final IIOMetadataNode text = new IIOMetadataNode("Text");
         text.appendChild(textEntry);
 
-        IIOMetadataNode root = new IIOMetadataNode(IIOMetadataFormatImpl.standardMetadataFormatName);
+        final IIOMetadataNode root = new IIOMetadataNode(IIOMetadataFormatImpl.standardMetadataFormatName);
         root.appendChild(text);
 
         metadata.mergeTree(IIOMetadataFormatImpl.standardMetadataFormatName, root);
     }
 
+
     private static String getTextEntry(final IIOMetadata metadata, final String key) {
-        IIOMetadataNode root = (IIOMetadataNode) metadata.getAsTree(IIOMetadataFormatImpl.standardMetadataFormatName);
-        NodeList entries = root.getElementsByTagName("TextEntry");
+        final IIOMetadataNode root = (IIOMetadataNode) metadata.getAsTree(IIOMetadataFormatImpl.standardMetadataFormatName);
+        final NodeList entries = root.getElementsByTagName("TextEntry");
 
         for (int i = 0; i < entries.getLength(); i++) {
-            IIOMetadataNode node = (IIOMetadataNode) entries.item(i);
+            final IIOMetadataNode node = (IIOMetadataNode) entries.item(i);
             if (node.getAttribute("keyword").equals(key)) {
                 return node.getAttribute("value");
             }
@@ -49,37 +50,37 @@ public class PNGMetadataManipulator {
         return null;
     }
 
-    private static void removeTextEntry(final IIOMetadata metadata, final String key) throws IIOInvalidTreeException {
-        IIOMetadataNode root = (IIOMetadataNode) metadata.getAsTree(IIOMetadataFormatImpl.standardMetadataFormatName);
-        NodeList entries = root.getElementsByTagName("TextEntry");
+    private static void removeTextEntry(final IIOMetadata metadata, final String key) {
+        final IIOMetadataNode root = (IIOMetadataNode) metadata.getAsTree(IIOMetadataFormatImpl.standardMetadataFormatName);
+        final NodeList entries = root.getElementsByTagName("TextEntry");
 
         for (int i = 0; i < entries.getLength(); i++) {
-            IIOMetadataNode node = (IIOMetadataNode) entries.item(i);
+            final IIOMetadataNode node = (IIOMetadataNode) entries.item(i);
             if (node.getAttribute("keyword").equals(key)) {
-                // feels a little weird to do this but I'm fairly sure it should work.
+                // feels a little weird to do this, but I'm fairly sure it should work.
                 node.getParentNode().removeChild(node);
             }
         }
     }
 
-    public static void attachMetadata(File f, Map<String, String> meta) {
+    public static void attachMetadata(final File f, final Map<String, String> meta) {
         try {
-            ImageInputStream input = ImageIO.createImageInputStream(f);
-            Iterator<ImageReader> readers = ImageIO.getImageReaders(input);
-            ImageReader reader = readers.next();
+            final ImageInputStream input = ImageIO.createImageInputStream(f);
+            final Iterator<ImageReader> readers = ImageIO.getImageReaders(input);
+            final ImageReader reader = readers.next();
             reader.setInput(input);
-            IIOImage img = reader.readAll(0, null);
+            final IIOImage img = reader.readAll(0, null);
             // Image is fully loaded into memory. Now we add metadata and overwrite the original.
-            for (Map.Entry<String, String> entry : meta.entrySet()) {
+            for (final Map.Entry<String, String> entry : meta.entrySet()) {
                 addTextEntry(img.getMetadata(), entry.getKey(), entry.getValue());
             }
             input.close();
-            ImageOutputStream out = ImageIO.createImageOutputStream(f);
-            ImageWriter writer = ImageIO.getImageWriter(reader);
+            final ImageOutputStream out = ImageIO.createImageOutputStream(f);
+            final ImageWriter writer = ImageIO.getImageWriter(reader);
             writer.setOutput(out);
             writer.write(img);
             out.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
 

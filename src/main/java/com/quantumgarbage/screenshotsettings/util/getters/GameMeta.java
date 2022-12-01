@@ -15,40 +15,40 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class GameMeta {
-    public static String getCoordinatesMetadata(MinecraftClient client) {
+    public static String getCoordinatesMetadata(final MinecraftClient client) {
         final var p = client.player;
-        assert p != null;
+        assert null != p;
         final Vec3d pos = getCoordinates(p);
         return String.format("X:[%.3f] Y:[%.3f] Z:[%.3f] Yaw:[%.3f] Pitch:[%.3f]", pos.x, pos.y, pos.z, p.getYaw(), p.getPitch());
     }
 
-    public static Vec3d getCoordinates(ClientPlayerEntity p) {
-        assert p != null;
+    public static Vec3d getCoordinates(final ClientPlayerEntity p) {
+        assert null != p;
         return p.getPos();
     }
 
-    public static String getPlayerName(MinecraftClient client) {
-        assert client.player != null;
+    public static String getPlayerName(final MinecraftClient client) {
+        assert null != client.player;
         return client.player.getEntityName();
     }
 
-    private static String getWorldNameSinglePlayer(MinecraftClient client) {
+    private static String getWorldNameSinglePlayer(final MinecraftClient client) {
 
-        assert client.getServer() != null;
+        assert null != client.getServer();
         final ServerWorldProperties worldProperties = (ServerWorldProperties) client.getServer().getWorlds().iterator().next().getLevelProperties();
         return worldProperties.getLevelName();
 
 
     }
 
-    private static String getWorldNameMultiplayer(MinecraftClient client) {
+    private static String getWorldNameMultiplayer(final MinecraftClient client) {
         final ServerInfo si = client.getCurrentServerEntry();
-        assert si != null;
+        assert null != si;
         return si.name;
 
     }
 
-    public static String getWorldName(MinecraftClient client) {
+    public static String getWorldName(final MinecraftClient client) {
         if (isSinglePlayer(client)) {
             return getWorldNameSinglePlayer(client);
         } else {
@@ -56,20 +56,20 @@ public class GameMeta {
         }
     }
 
-    public static String getSeed(MinecraftClient client) {
+    public static String getSeed(final MinecraftClient client) {
         if (isSinglePlayer(client)) {
             final IntegratedServer server = client.getServer();
-            assert server != null;
+            assert null != server;
             return Long.toString(server.getWorlds().iterator().next().getSeed());
         }
         return "Screenshot taken in Multiplayer -- Seed Unknown";
     }
 
-    private static boolean isSinglePlayer(MinecraftClient client) {
+    private static boolean isSinglePlayer(final MinecraftClient client) {
         return client.isInSingleplayer();
     }
 
-    public static String getResourcePacks(MinecraftClient client) {
+    public static String getResourcePacks(final MinecraftClient client) {
         final StringBuilder base = new StringBuilder("[");
         final Iterator<ResourcePack> resourcePackIterator = client.getResourceManager().streamResourcePacks().iterator();
         while (resourcePackIterator.hasNext()) {
@@ -82,7 +82,7 @@ public class GameMeta {
         return base.toString();
     }
 
-    public static String getVersion(MinecraftClient client) {
+    public static String getVersion(final MinecraftClient client) {
         return client.getGame().getVersion().getName();
     }
 
@@ -90,7 +90,7 @@ public class GameMeta {
         return Util.getFormattedCurrentTime();
     }
 
-    public static HashMap<String, String> getMetadata(MinecraftClient client) {
+    public static HashMap<String, String> getMetadata(final MinecraftClient client) {
 
         final HashMap<String, String> meta = new HashMap<>();
         if (!ScreenshotSettingsConfig.INSTANCE.useMetadata) {

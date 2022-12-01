@@ -14,7 +14,7 @@ public class ShaderIntegration {
         if(irisPresent()) {
             return Iris.getCurrentPackName();
         }
-        return "Iris Shaders not found -- could not resolve shaderpack";
+        return "Iris Shaders not found -- could not resolve shader pack";
     }
     public static String getShaderNameNoExtension(){
         return  FilenameUtils.removeExtension(getShaderName());

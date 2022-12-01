@@ -30,7 +30,7 @@ public class ScreenshotSettingsConfig {
     public static final Path configFile = FabricLoader.getInstance().getConfigDir().resolve("screenshot-settings.json");
     private final Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
 
-    public static ScreenshotSettingsConfig INSTANCE = new ScreenshotSettingsConfig();
+    public static final ScreenshotSettingsConfig INSTANCE = new ScreenshotSettingsConfig();
     // Change screenshot directory
     @ConfigEntry
     public String screenshotDirectory;
@@ -61,49 +61,49 @@ public class ScreenshotSettingsConfig {
 
     public void load() {
         try {
-            if (Files.notExists(configFile)) {
-                save();
+            if (Files.notExists(ScreenshotSettingsConfig.configFile)) {
+                this.save();
                 return;
             }
 
-            JsonObject json = gson.fromJson(Files.readString(configFile), JsonObject.class);
+            final JsonObject json = this.gson.fromJson(Files.readString(configFile), JsonObject.class);
             if (json.has("screenshot_directory")) {
-                screenshotDirectory = json.getAsJsonPrimitive("screenshot_directory").getAsString();
+                this.screenshotDirectory = json.getAsJsonPrimitive("screenshot_directory").getAsString();
             }
             if (json.has("use_custom_screenshot_directory")) {
-                useCustomScreenshotDirectory = json.getAsJsonPrimitive("use_custom_screenshot_directory").getAsBoolean();
+                this.useCustomScreenshotDirectory = json.getAsJsonPrimitive("use_custom_screenshot_directory").getAsBoolean();
             }
             if (json.has("use_metadata")) {
-                useMetadata = json.getAsJsonPrimitive("use_metadata").getAsBoolean();
+                this.useMetadata = json.getAsJsonPrimitive("use_metadata").getAsBoolean();
             }
             if (json.has("world_name")) {
-                worldName = json.getAsJsonPrimitive("world_name").getAsBoolean();
+                this.worldName = json.getAsJsonPrimitive("world_name").getAsBoolean();
             }
             if (json.has("mc_version")) {
-                mcVersion = json.getAsJsonPrimitive("mc_version").getAsBoolean();
+                this.mcVersion = json.getAsJsonPrimitive("mc_version").getAsBoolean();
             }
             if (json.has("shader_pack")) {
-                shaderPack = json.getAsJsonPrimitive("shader_pack").getAsBoolean();
+                this.shaderPack = json.getAsJsonPrimitive("shader_pack").getAsBoolean();
             }
             if (json.has("resource_packs")) {
-                resourcePacks = json.getAsJsonPrimitive("resource_packs").getAsBoolean();
+                this.resourcePacks = json.getAsJsonPrimitive("resource_packs").getAsBoolean();
             }
             if (json.has("seed")) {
-                seed = json.getAsJsonPrimitive("seed").getAsBoolean();
+                this.seed = json.getAsJsonPrimitive("seed").getAsBoolean();
             }
             if (json.has("use_custom_screenshot_naming_schema")) {
-                useCustomScreenshotNamingSchema = json.getAsJsonPrimitive("use_custom_screenshot_naming_schema").getAsBoolean();
+                this.useCustomScreenshotNamingSchema = json.getAsJsonPrimitive("use_custom_screenshot_naming_schema").getAsBoolean();
             }
             if (json.has("screenshot_naming_schema")) {
-                screenshotNamingSchema = json.getAsJsonPrimitive("screenshot_naming_schema").getAsString();
+                this.screenshotNamingSchema = json.getAsJsonPrimitive("screenshot_naming_schema").getAsString();
             }
-            if (screenshotNamingSchema == null) {
-                screenshotNamingSchema = "<timedate>";
+            if (null == this.screenshotNamingSchema) {
+                this.screenshotNamingSchema = "<timedate>";
             }
-            if (screenshotDirectory == null) {
-                screenshotDirectory = "/screenshots";
+            if (null == this.screenshotDirectory) {
+                this.screenshotDirectory = "/screenshots";
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }
@@ -111,38 +111,38 @@ public class ScreenshotSettingsConfig {
     public void save() {
         try {
             Files.deleteIfExists(configFile);
-            JsonObject json = new JsonObject();
-            if (screenshotDirectory == null) {
-                screenshotDirectory = "/screenshots";
+            final JsonObject json = new JsonObject();
+            if (null == this.screenshotDirectory) {
+                this.screenshotDirectory = "/screenshots";
             }
-            if (screenshotNamingSchema == null) {
-                screenshotNamingSchema = "<timedate>";
+            if (null == this.screenshotNamingSchema) {
+                this.screenshotNamingSchema = "<timedate>";
             }
-            json.addProperty("screenshot_directory", screenshotDirectory);
-            json.addProperty("use_custom_screenshot_directory", useCustomScreenshotDirectory);
-            json.addProperty("use_metadata", useMetadata);
-            json.addProperty("world_name", worldName);
-            json.addProperty("mc_version", mcVersion);
-            json.addProperty("shader_pack", shaderPack);
-            json.addProperty("resource_packs", resourcePacks);
-            json.addProperty("seed", seed);
-            json.addProperty("use_custom_screenshot_naming_schema", useCustomScreenshotNamingSchema);
-            json.addProperty("screenshot_naming_schema", screenshotNamingSchema);
-            Files.writeString(configFile, gson.toJson(json));
-        } catch (IOException e) {
+            json.addProperty("screenshot_directory", this.screenshotDirectory);
+            json.addProperty("use_custom_screenshot_directory", this.useCustomScreenshotDirectory);
+            json.addProperty("use_metadata", this.useMetadata);
+            json.addProperty("world_name", this.worldName);
+            json.addProperty("mc_version", this.mcVersion);
+            json.addProperty("shader_pack", this.shaderPack);
+            json.addProperty("resource_packs", this.resourcePacks);
+            json.addProperty("seed", this.seed);
+            json.addProperty("use_custom_screenshot_naming_schema", this.useCustomScreenshotNamingSchema);
+            json.addProperty("screenshot_naming_schema", this.screenshotNamingSchema);
+            Files.writeString(configFile, this.gson.toJson(json));
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }
     public String getScreenshotDirectory(){
-        if(!useCustomScreenshotDirectory){
+        if(!this.useCustomScreenshotDirectory){
             return "./screenshots/";
         }
         else {
-            return screenshotDirectory + "/";
+            return this.screenshotDirectory + "/";
         }
     }
-    public Screen createGui(Screen parent) {
-        Option<String> screenshotDirectory = Option.createBuilder(String.class)
+    public Screen createGui(final Screen parent) {
+        final Option<String> screenshotDirectory = Option.createBuilder(String.class)
                 .name(Text.of("Custom Screenshot Directory"))
                 .tooltip(Text.of("Where screenshots will be saved to, provided Use Custom Screenshot Directory is enabled."))
                 .binding(
@@ -152,7 +152,7 @@ public class ScreenshotSettingsConfig {
 
                 ).controller(StringController::new)
                 .build();
-        ConfigCategory dirConfig = ConfigCategory.createBuilder()
+        final ConfigCategory dirConfig = ConfigCategory.createBuilder()
                 .name(Text.of("Screenshot Directory"))
                 .option(Option.createBuilder(boolean.class)
                         .name(Text.of("Use Custom Screenshot Directory"))
@@ -170,15 +170,15 @@ public class ScreenshotSettingsConfig {
                         .option(ButtonOption.createBuilder()
                                 .name(Text.of("Choose Screenshots Folder"))
                                 .action(((yaclScreen, buttonOption) -> {
-                                    String currentSetting = screenshotDirectory.pendingValue();
-                                    String newDir = TinyFileDialogs.tinyfd_selectFolderDialog("Select New Screenshots Directory", currentSetting);
+                                    final String currentSetting = screenshotDirectory.pendingValue();
+                                    final String newDir = TinyFileDialogs.tinyfd_selectFolderDialog("Select New Screenshots Directory", currentSetting);
                                     screenshotDirectory.requestSet(newDir);
                                 }))
                                 .controller((buttonOption) -> new ActionController(buttonOption, Text.of("Open File Dialog")))
                                 .build())
                         .build())
                 .build();
-        ConfigCategory metadata = ConfigCategory.createBuilder()
+        final ConfigCategory metadata = ConfigCategory.createBuilder()
                 .name(Text.of("Screenshot Metadata"))
                 .option(Option.createBuilder(boolean.class)
                         .name(Text.of("Use Custom Metadata"))
@@ -243,7 +243,7 @@ public class ScreenshotSettingsConfig {
                         .build())
                 .build();
 
-        ConfigCategory screenshotNaming = ConfigCategory.createBuilder()
+        final ConfigCategory screenshotNaming = ConfigCategory.createBuilder()
                 .name(Text.of("Screenshot Naming"))
                 .option(Option.createBuilder(boolean.class)
                         .name(Text.of("Enable Custom Screenshot Naming"))

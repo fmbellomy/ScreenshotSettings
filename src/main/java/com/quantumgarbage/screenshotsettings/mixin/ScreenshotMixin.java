@@ -9,7 +9,6 @@ import com.quantumgarbage.screenshotsettings.util.getters.GameMeta;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.util.ScreenshotRecorder;
 import net.minecraft.text.Text;
-import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,26 +25,26 @@ import java.util.function.Consumer;
 public class ScreenshotMixin {
     @ModifyVariable(
             method = "saveScreenshotInner",
-            at = @At(value = "STORE"),
+            at = @At("STORE"),
             index = 5)
-    private static File directoryInject(File f) {
+    private static File directoryInject(final File f) {
         return new File(ScreenshotSettingsConfig.INSTANCE.screenshotDirectory);
     }
 
     @ModifyVariable(
             method = "saveScreenshotInner",
             argsOnly = true,
-            at = @At(value = "HEAD"),
+            at = @At("HEAD"),
             index = 1
     )
-    private static String filenameInject(String orig) {
-        String filename = FileNameTemplateProcessor.format(ScreenshotSettingsConfig.INSTANCE.screenshotNamingSchema);
-        String dir = ScreenshotSettingsConfig.INSTANCE.getScreenshotDirectory();
+    private static String filenameInject(final String orig) {
+        final String filename = FileNameTemplateProcessor.format(ScreenshotSettingsConfig.INSTANCE.screenshotNamingSchema);
+        final String dir = ScreenshotSettingsConfig.INSTANCE.getScreenshotDirectory();
 
         int i = 1;
         String tmp = filename;
         while(true){
-            Path p = Path.of(dir + tmp + ".png");
+            final Path p = Path.of(dir + tmp + ".png");
             if(!Files.exists(p)){
                 break;
             }
@@ -57,12 +56,13 @@ public class ScreenshotMixin {
 
     // inject into the lambda in Util.getServiceWorker.execute()
     // this is to create any necessary subdirectories for the screenshots.
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Inject(
             method = "method_1661",
-            at = @At(value = "HEAD"),
+            at = @At("HEAD"),
             locals = LocalCapture.CAPTURE_FAILEXCEPTION
     )
-    private static void createDirs(NativeImage _nativeImage, File file, Consumer<Text> _consumer, CallbackInfo _ci) {
+    private static void createDirs(final NativeImage _nativeImage, final File file, final Consumer<Text> _consumer, final CallbackInfo _ci) {
         file.getParentFile().mkdirs();
     }
 
@@ -71,7 +71,7 @@ public class ScreenshotMixin {
             at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 0),
             locals = LocalCapture.CAPTURE_FAILEXCEPTION
     )
-    private static void attachMetadata(NativeImage nativeImage, File file, Consumer<Text> consumer, CallbackInfo ci) {
+    private static void attachMetadata(final NativeImage nativeImage, final File file, final Consumer<Text> consumer, final CallbackInfo ci) {
         PNGMetadataManipulator.attachMetadata(file, GameMeta.getMetadata(ScreenshotSettingsClient.client));
     }
 }
