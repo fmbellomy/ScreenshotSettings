@@ -76,6 +76,9 @@ public class ScreenshotSettingsConfig {
             if (json.has("use_metadata")) {
                 this.useMetadata = json.getAsJsonPrimitive("use_metadata").getAsBoolean();
             }
+            if (json.has("coordinates")) {
+                this.coordinates = json.getAsJsonPrimitive("coordinates").getAsBoolean();
+            }
             if (json.has("world_name")) {
                 this.worldName = json.getAsJsonPrimitive("world_name").getAsBoolean();
             }
@@ -121,6 +124,7 @@ public class ScreenshotSettingsConfig {
             json.addProperty("screenshot_directory", this.screenshotDirectory);
             json.addProperty("use_custom_screenshot_directory", this.useCustomScreenshotDirectory);
             json.addProperty("use_metadata", this.useMetadata);
+            json.addProperty("coordinates", this.coordinates);
             json.addProperty("world_name", this.worldName);
             json.addProperty("mc_version", this.mcVersion);
             json.addProperty("shader_pack", this.shaderPack);

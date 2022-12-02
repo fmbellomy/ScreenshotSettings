@@ -1,11 +1,13 @@
 package com.quantumgarbage.screenshotsettings.util.getters;
 
+
 import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsConfig;
 import com.quantumgarbage.screenshotsettings.integrations.ShaderIntegration;
 import net.minecraft.client.MinecraftClient;
+
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ServerInfo;
-import net.minecraft.resource.ResourcePack;
+import net.minecraft.resource.pack.ResourcePack;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Vec3d;
@@ -28,8 +30,7 @@ public class GameMeta {
     }
 
     public static String getPlayerName(final MinecraftClient client) {
-        assert null != client.player;
-        return client.player.getEntityName();
+        return client.getSession().getUsername();
     }
 
     private static String getWorldNameSinglePlayer(final MinecraftClient client) {
@@ -87,12 +88,17 @@ public class GameMeta {
     }
 
     public static String timedate() {
-        return Util.getFormattedCurrentTime();
+
+        return Util.m_kkscytto();
     }
 
     public static HashMap<String, String> getMetadata(final MinecraftClient client) {
-
         final HashMap<String, String> meta = new HashMap<>();
+        // make sure that metadata even is possible to obtain.
+        if(null == client.player || null == client.world){
+            return meta;
+        }
+
         if (!ScreenshotSettingsConfig.INSTANCE.useMetadata) {
             return meta;
         }

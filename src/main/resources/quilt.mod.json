@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "quilt_loader": {
+    "group": "com.quantumgarbage",
+    "id": "screenshotsettings",
+    "version": "${version}",
+    "metadata": {
+      "name": "Screenshot Settings",
+      "description": "A mod for configuring where screenshots are stored, how they are named, and what information to include in their metadata.",
+      "contributors": {
+        "fmbellomy": "Owner"
+      },
+      "contact": {
+        "issues": "https://github.com/fmbellomy/ScreenshotSettings",
+        "sources": "https://github.com/fmbellomy/ScreenshotSettings"
+      },
+      "icon": "assets/screenshotsettings/icon.png"
+    },
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "entrypoints": {
+      "client_init": "com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient",
+      "modmenu": "com.quantumgarbage.screenshotsettings.integrations.ModMenuIntegration"
+    },
+    "depends": [
+      {
+        "id": "modmenu",
+        "versions": ">=4.1"
+      },
+      {
+        "id": "yet-another-config-lib",
+        "versions": ">=1.7.1"
+      },
+      {
+        "id": "quilt_loader",
+        "versions": ">=0.17.0-"
+      },
+      {
+        "id": "quilted_fabric_api",
+        "versions": ">=4.0.0-"
+      },
+      {
+        "id": "minecraft",
+        "versions": ">=1.19.2"
+      },
+      {
+        "id": "iris",
+        "versions": ">=1.4.3",
+        "optional": true
+
+      }
+    ]
+  },
+  "mixin": "screenshotsettings.mixins.json"
+}
