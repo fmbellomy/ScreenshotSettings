@@ -1,11 +1,14 @@
 package com.quantumgarbage.screenshotsettings.util.getters;
 
+
+import com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient;
 import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsConfig;
 import com.quantumgarbage.screenshotsettings.integrations.ShaderIntegration;
 import net.minecraft.client.MinecraftClient;
+
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ServerInfo;
-import net.minecraft.resource.ResourcePack;
+import net.minecraft.resource.pack.ResourcePack;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Vec3d;
@@ -28,12 +31,10 @@ public class GameMeta {
     }
 
     public static String getPlayerName(final MinecraftClient client) {
-        assert null != client.player;
-        return client.player.getEntityName();
+        return client.getSession().getUsername();
     }
 
     private static String getWorldNameSinglePlayer(final MinecraftClient client) {
-
         assert null != client.getServer();
         final ServerWorldProperties worldProperties = (ServerWorldProperties) client.getServer().getWorlds().iterator().next().getLevelProperties();
         return worldProperties.getLevelName();
@@ -87,31 +88,35 @@ public class GameMeta {
     }
 
     public static String timedate() {
-        return Util.getFormattedCurrentTime();
+        return Util.m_kkscytto();
     }
 
     public static HashMap<String, String> getMetadata(final MinecraftClient client) {
-
         final HashMap<String, String> meta = new HashMap<>();
-        if (!ScreenshotSettingsConfig.INSTANCE.useMetadata) {
+        // make sure that metadata even is possible to obtain.
+        if(null == client.player || null == client.world){
             return meta;
         }
-        if (ScreenshotSettingsConfig.INSTANCE.coordinates) {
+
+        if (!ScreenshotSettingsClient.CONFIG.useMetadata) {
+            return meta;
+        }
+        if (ScreenshotSettingsClient.CONFIG.coordinates) {
             meta.put("Coordinates", getCoordinatesMetadata(client));
         }
-        if (ScreenshotSettingsConfig.INSTANCE.worldName) {
+        if (ScreenshotSettingsClient.CONFIG.worldName) {
             meta.put("World/Server Name", getWorldName(client));
         }
-        if (ScreenshotSettingsConfig.INSTANCE.seed) {
+        if (ScreenshotSettingsClient.CONFIG.seed) {
             meta.put("World Seed", getSeed(client));
         }
-        if (ScreenshotSettingsConfig.INSTANCE.resourcePacks) {
+        if (ScreenshotSettingsClient.CONFIG.resourcePacks) {
             meta.put("Resource Packs", getResourcePacks(client));
         }
-        if (ScreenshotSettingsConfig.INSTANCE.shaderPack && ShaderIntegration.irisPresent()) {
+        if (ScreenshotSettingsClient.CONFIG.shaderPack && ShaderIntegration.irisPresent()) {
             meta.put("Shader Pack", ShaderIntegration.getShaderName());
         }
-        if (ScreenshotSettingsConfig.INSTANCE.mcVersion) {
+        if (ScreenshotSettingsClient.CONFIG.mcVersion) {
             meta.put("Minecraft Version", getVersion(client));
         }
         return meta;
