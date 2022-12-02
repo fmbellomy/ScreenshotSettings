@@ -1,6 +1,7 @@
 package com.quantumgarbage.screenshotsettings.util.getters;
 
 
+import com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient;
 import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsConfig;
 import com.quantumgarbage.screenshotsettings.integrations.ShaderIntegration;
 import net.minecraft.client.MinecraftClient;
@@ -34,7 +35,6 @@ public class GameMeta {
     }
 
     private static String getWorldNameSinglePlayer(final MinecraftClient client) {
-
         assert null != client.getServer();
         final ServerWorldProperties worldProperties = (ServerWorldProperties) client.getServer().getWorlds().iterator().next().getLevelProperties();
         return worldProperties.getLevelName();
@@ -88,7 +88,6 @@ public class GameMeta {
     }
 
     public static String timedate() {
-
         return Util.m_kkscytto();
     }
 
@@ -99,25 +98,25 @@ public class GameMeta {
             return meta;
         }
 
-        if (!ScreenshotSettingsConfig.INSTANCE.useMetadata) {
+        if (!ScreenshotSettingsClient.CONFIG.useMetadata) {
             return meta;
         }
-        if (ScreenshotSettingsConfig.INSTANCE.coordinates) {
+        if (ScreenshotSettingsClient.CONFIG.coordinates) {
             meta.put("Coordinates", getCoordinatesMetadata(client));
         }
-        if (ScreenshotSettingsConfig.INSTANCE.worldName) {
+        if (ScreenshotSettingsClient.CONFIG.worldName) {
             meta.put("World/Server Name", getWorldName(client));
         }
-        if (ScreenshotSettingsConfig.INSTANCE.seed) {
+        if (ScreenshotSettingsClient.CONFIG.seed) {
             meta.put("World Seed", getSeed(client));
         }
-        if (ScreenshotSettingsConfig.INSTANCE.resourcePacks) {
+        if (ScreenshotSettingsClient.CONFIG.resourcePacks) {
             meta.put("Resource Packs", getResourcePacks(client));
         }
-        if (ScreenshotSettingsConfig.INSTANCE.shaderPack && ShaderIntegration.irisPresent()) {
+        if (ScreenshotSettingsClient.CONFIG.shaderPack && ShaderIntegration.irisPresent()) {
             meta.put("Shader Pack", ShaderIntegration.getShaderName());
         }
-        if (ScreenshotSettingsConfig.INSTANCE.mcVersion) {
+        if (ScreenshotSettingsClient.CONFIG.mcVersion) {
             meta.put("Minecraft Version", getVersion(client));
         }
         return meta;

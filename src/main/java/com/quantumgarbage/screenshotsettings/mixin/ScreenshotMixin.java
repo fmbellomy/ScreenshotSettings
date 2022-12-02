@@ -34,7 +34,7 @@ public class ScreenshotMixin {
             at = @At("STORE"),
             index = 5)
     private static File directoryInject(final File f) {
-        return new File(ScreenshotSettingsConfig.INSTANCE.screenshotDirectory);
+        return new File(ScreenshotSettingsClient.CONFIG.screenshotDirectory);
     }
 
     @ModifyVariable(
@@ -44,8 +44,8 @@ public class ScreenshotMixin {
             index = 1
     )
     private static String filenameInject(final String orig) {
-        final String filename = FileNameTemplateProcessor.format(ScreenshotSettingsConfig.INSTANCE.screenshotNamingSchema);
-        final String dir = ScreenshotSettingsConfig.INSTANCE.getScreenshotDirectory();
+        final String filename = FileNameTemplateProcessor.format(ScreenshotSettingsClient.CONFIG.screenshotNamingSchema);
+        final String dir = ScreenshotSettingsClient.CONFIG.getScreenshotDirectory();
 
         int i = 1;
         String tmp = filename;

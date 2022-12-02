@@ -31,6 +31,10 @@
         "versions": ">=1.7.1"
       },
       {
+        "id": "cloth-config",
+        "versions": ">=8.2.88"
+      },
+      {
         "id": "quilt_loader",
         "versions": ">=0.17.0-"
       },
