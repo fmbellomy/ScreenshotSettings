@@ -5,10 +5,9 @@ import com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient;
 import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsConfig;
 import com.quantumgarbage.screenshotsettings.integrations.ShaderIntegration;
 import net.minecraft.client.MinecraftClient;
-
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ServerInfo;
-import net.minecraft.resource.pack.ResourcePack;
+import net.minecraft.resource.ResourcePack;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Vec3d;
@@ -88,7 +87,7 @@ public class GameMeta {
     }
 
     public static String timedate() {
-        return Util.m_kkscytto();
+        return Util.getFormattedCurrentTime();
     }
 
     public static HashMap<String, String> getMetadata(final MinecraftClient client) {

@@ -4,22 +4,24 @@ import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsCon
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+@Environment(EnvType.CLIENT)
 public class ScreenshotSettingsClient implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("ScreenshotSettings");
     public static ScreenshotSettingsConfig CONFIG;
     public static MinecraftClient client;
     @Override
-    public void onInitializeClient(final ModContainer mod) {
+    public void onInitializeClient() {
         AutoConfig.register(ScreenshotSettingsConfig.class, GsonConfigSerializer::new);
         CONFIG = AutoConfig.getConfigHolder(ScreenshotSettingsConfig.class).getConfig();
         client = MinecraftClient.getInstance();
-        LOGGER.info("{} loaded.", mod.metadata().name());
+        LOGGER.info("ScreenshotSettings loaded.");
     }
 }

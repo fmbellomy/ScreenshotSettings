@@ -1,10 +1,7 @@
 plugins {
-    id 'org.quiltmc.loom' version '1.0.+'
-    // id 'org.quiltmc.quilt-mappings-on-loom' version '4.2.1'
-    id 'io.github.juuxel.loom-quiltflower' version '1.7.+' // For loom 0.8-0.9, 0.11+
+    id 'fabric-loom' version '0.12.+'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '7.0.0'
-
 }
 sourceCompatibility = 17
 targetCompatibility = 17
@@ -29,10 +26,6 @@ repositories {
         name 'Shedaniel'
         url "https://maven.shedaniel.me/"
     }
-    maven {
-        name 'Quilt'
-        url 'https://maven.quiltmc.org/repository/release'
-    }
     // Mod Menu
     maven { url "https://maven.terraformersmc.com/releases/" }
     // YetAnotherConfigLib
@@ -43,12 +36,11 @@ repositories {
 dependencies {
     // To change the versions see the gradle.yml.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    mappings "org.quiltmc:quilt-mappings:${minecraft_version}+build.${quilt_mappings}:intermediary-v2"
-
-    modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
-    modImplementation "org.quiltmc:qsl:${qsl_version}+${minecraft_version}"
-    modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}-${minecraft_version}"
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     // cloth config for serializing/deserializing config data
     modApi "me.shedaniel.cloth:cloth-config-fabric:8.2.88"
     // Mod Menu
@@ -61,13 +53,12 @@ dependencies {
     shadow(implementation('org.antlr:ST4:4.3.4'))
 
 
-
 }
 processResources {
     inputs.property "version", project.version
     filteringCharset "UTF-8"
 
-    filesMatching("*.mod.json") {
+    filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
 }

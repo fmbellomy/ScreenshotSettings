@@ -2,18 +2,13 @@ package com.quantumgarbage.screenshotsettings.mixin;
 
 
 import com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient;
-import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsConfig;
 import com.quantumgarbage.screenshotsettings.util.FileNameTemplateProcessor;
 import com.quantumgarbage.screenshotsettings.util.PNGMetadataManipulator;
 import com.quantumgarbage.screenshotsettings.util.getters.GameMeta;
-
-import com.mojang.blaze3d.texture.NativeImage;
+import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.util.ScreenshotRecorder;
 import net.minecraft.text.Text;
-import org.slf4j.Logger;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -27,8 +22,6 @@ import java.util.function.Consumer;
 
 @Mixin(ScreenshotRecorder.class)
 public class ScreenshotMixin {
-    @Shadow @Final private static Logger LOGGER;
-
     @ModifyVariable(
             method = "saveScreenshotInner",
             at = @At("STORE"),
@@ -57,7 +50,6 @@ public class ScreenshotMixin {
             tmp = filename + "_(" + i + ")";
             ++i;
         }
-        LOGGER.info("Saving screenshot as " + tmp + ".png");
         return tmp + ".png";
     }
 
@@ -65,7 +57,7 @@ public class ScreenshotMixin {
     // this is to create any necessary subdirectories for the screenshots.
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Inject(
-            method = "m_laykisam",
+            method = "method_1661",
             at = @At("HEAD"),
             locals = LocalCapture.CAPTURE_FAILEXCEPTION
     )
@@ -74,8 +66,8 @@ public class ScreenshotMixin {
     }
 
     @Inject(
-            method = "m_laykisam",
-            at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/texture/NativeImage;writeFile(Ljava/io/File;)V", shift = At.Shift.AFTER),
+            method = "method_1661",
+            at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 0),
             locals = LocalCapture.CAPTURE_FAILEXCEPTION
     )
     private static void attachMetadata(final NativeImage nativeImage, final File file, final Consumer<Text> consumer, final CallbackInfo ci) {
