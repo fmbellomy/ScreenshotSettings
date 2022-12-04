@@ -93,9 +93,3 @@ The metadata attached by this mod should appear at the bottom, as it does in the
 just be careful that you don't end up making it so other people's games try saving screenshots to arbitrary non-existent directories.
 
 I intend on eventually adding a way for the mod to detect that it is being run on a new unique machine for the first time, but I haven't decided how to implement that yet. For now, just don't ship your config.
-
-## A final note for any potential contributors:
-This is my first serious attempt at a mod. You will find code that looks pretty gross in there.
-The worst offender is the config system. It's liable to crash the game if the config file is ever manually edited outside the in-game menu.
-
-I would entirely appreciate pull requests if you have a bug fix, optimization, or feature you'd like to add.
