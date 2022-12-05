@@ -37,14 +37,19 @@ public class ScreenshotMixin {
             index = 1
     )
     private static String filenameInject(final String orig) {
-        final String filename = FileNameTemplateProcessor.format(ScreenshotSettingsClient.CONFIG.screenshotNamingSchema);
+        final String filename;
+        if (orig == null) {
+            filename = FileNameTemplateProcessor.format(ScreenshotSettingsClient.CONFIG.screenshotNamingSchema);
+        } else {
+            filename = orig;
+        }
         final String dir = ScreenshotSettingsClient.CONFIG.getScreenshotDirectory();
 
         int i = 1;
         String tmp = filename;
-        while(true){
+        while (true) {
             final Path p = Path.of(dir + tmp + ".png");
-            if(!Files.exists(p)){
+            if (!Files.exists(p)) {
                 break;
             }
             tmp = filename + "_(" + i + ")";
