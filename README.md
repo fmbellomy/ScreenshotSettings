@@ -12,6 +12,22 @@ This should allow for convenient sorting/searching through screenshots by releva
 making your screenshots more accessible. (Seriously, I hate having to go into my AppData folder when I'm playing on
 Windows. It's terribly annoying.)
 
+The mod also adds a new command:
+```
+/screenshot <optional-filename>
+``` 
+
+and an alias that does the same thing:
+```
+/ss <optional-filename>
+```
+
+If you use these commands and provide a filename, they will not follow the naming scheme you may have set, 
+and they do not work with templates.
+(This means you can't do something like `/ss <world>/cool_screenshot_name`)!
+
+
+
 ## Things you can do with the custom File Naming system.
 The file naming system is somewhat bare bones at the moment, only supporting 8 templates.
 
@@ -60,6 +76,8 @@ This results in a directory structure like the following
         └── 2022-11-28_18.36.38.png
 ```
 If you, however, were to have many servers saved as "Minecraft Server" and many singleplayer worlds named "New World", this wouldn't do much to help you.
+
+
 ## A note on PNG Metadata
 The Windows Explorer cannot display the metadata included by this mod. You will need to get a dedicated program for windows to be able to see it.
 
