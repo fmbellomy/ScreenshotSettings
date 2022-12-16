@@ -45,23 +45,34 @@ public class ScreenshotSettingsClient implements ClientModInitializer {
     }
 
     private void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        LiteralArgumentBuilder<ServerCommandSource> builder = literal("screenshot")
+        // Believe me, I dislike this code duplication, but every single way of
+        // "aliasing" that I attempted through brigadier
+        // didn't work out so well.
+        dispatcher.register(literal("screenshot")
                 .executes(this::takeScreenshot)
                 .then(argument("filename", StringArgumentType.string())
                         .executes(context ->
                                 takeScreenshot(context, StringArgumentType.getString(context, "filename"))
                         )
-                );
-
-        dispatcher.register(builder);
-        // alias for /screenshot
-        dispatcher.register(literal("ss").redirect(builder.build()));
-
+                )
+        );
+        dispatcher.register(literal("ss")
+                .executes(this::takeScreenshot)
+                .then(argument("filename", StringArgumentType.string())
+                        .executes(context ->
+                                takeScreenshot(context, StringArgumentType.getString(context, "filename"))
+                        )
+                )
+        );
     }
 
     private int takeScreenshot(CommandContext<ServerCommandSource> context) {
         if (context.getSource().isExecutedByPlayer()) {
-            ScreenshotRecorder.saveScreenshot(new File("."), client.getFramebuffer(), context.getSource()::sendMessage);
+            ScreenshotRecorder.saveScreenshot(
+                    new File("."),
+                    client.getFramebuffer(), 
+                    context.getSource()::sendMessage
+            );
         } else {
             context.getSource().sendMessage(Text.literal("This command can only be executed by players!"));
         }
@@ -70,7 +81,12 @@ public class ScreenshotSettingsClient implements ClientModInitializer {
 
     private int takeScreenshot(CommandContext<ServerCommandSource> context, String filename) {
         if (context.getSource().isExecutedByPlayer()) {
-            ScreenshotRecorder.saveScreenshot(new File("."), filename, client.getFramebuffer(), context.getSource()::sendMessage);
+            ScreenshotRecorder.saveScreenshot(
+                    new File("."),
+                    filename,
+                    client.getFramebuffer(),
+                    context.getSource()::sendMessage
+            );
         } else {
             context.getSource().sendMessage(Text.literal("This command can only be executed by players!"));
         }
