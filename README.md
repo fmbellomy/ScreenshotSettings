@@ -33,7 +33,6 @@ The file naming system is somewhat bare bones at the moment, only supporting 8 t
 
 - `<datetime>`
   - Minecraft's default screenshot naming format.
-  - (*This may be changed in the future to support more customizable formatting, like having separate tags for `<month> <day> <hour> <minute> <second>`*)
 - `<world>`
   - The name of the world in Single Player, and the name of the server in Multiplayer.
 - `<version>`
@@ -49,7 +48,7 @@ By including a `/` in your naming scheme, you can create a directory structure b
 
 You can automatically organize your screenshots into folders according to what world/server they were taken on, or what shaderpack was in use at the time of the screenshot.
 
-My favorite naming scheme is `<world>/<datetime>` because it gives me all the organizational structure I really need, as well as being effective at preventing naming collisions.
+The naming scheme I personally use is `<world>/<datetime>` because it makes it easier to go through my screenshots based on where I took them, and still prevents name collisions.
 
 This results in a directory structure like the following
 
@@ -81,7 +80,6 @@ If you, however, were to have many servers saved as "Minecraft Server" and many 
 ## A note on PNG Metadata
 The Windows Explorer cannot display the metadata included by this mod. You will need to get a dedicated program for windows to be able to see it.
 
-To be frank, the existing solutions for viewing PNG metadata on Windows are somewhat disappointing. I may make a standalone tool for this in the future just to get something more accessible out there.
 ### Viewing Metadata: CLI
 If you're comfortable using a command-line tool, you can use [ImageMagick](https://imagemagick.org/)'s `identify --verbose` command to see it.
 
@@ -89,7 +87,7 @@ ImageMagick has releases for Windows, Mac, and Linux, and if you're on Linux cha
 
 This is the way I'd recommend, because it allows you to set up scripts for searching through or organizing your screenshots, but if all you're interested in is *viewing* metadata, perhaps you'd be more interested in a GUI.
 
-#### An option for any weirdos out there like myself - (WSL).
+#### This actually works with WSL.
 Because Minecraft uses URIs to resolve file paths on Windows, you can actually use the path to an installed WSL distribution as a valid save location to make manipulating your screenshot collection via WSL more convenient.
 
 ![Using WSL as a save destination](examples/wsl%20as%20a%20save%20destination.png)
@@ -104,10 +102,4 @@ For installing the base tool, I recommend Oliver Betz's [exiftool for windows](h
 It comes packaged with a GUI installer and is just generally more convenient.
 
 Once installed, you'll want to navigate to your screenshot and view the `All` tab to see all of its metadata. 
-The metadata attached by this mod should appear at the bottom, as it does in the screenshot above. 
-
-## DISCLAIMER FOR MODPACK DEVELOPERS!
-**MAKE SURE** that you do not accidentally ship any custom config you might have for this mod to users. Add it to a .gitignore or something,
-just be careful that you don't end up making it so other people's games try saving screenshots to arbitrary non-existent directories.
-
-I intend on eventually adding a way for the mod to detect that it is being run on a new unique machine for the first time, but I haven't decided how to implement that yet. For now, just don't ship your config.
+The metadata attached by this mod should appear at the bottom, as it does in the screenshot above.
