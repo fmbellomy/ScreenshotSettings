@@ -28,7 +28,7 @@ jobs:
       - name: Publish to MR and GH
         uses: Kir-Antipov/mc-publish@v3.2
         with:
-          game-versions: 1.19.2
+          game-versions: 1.19.4
           modrinth-dependencies: |
             yacl | depends 
             modmenu | depends
