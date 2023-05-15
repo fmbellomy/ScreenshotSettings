@@ -2,7 +2,6 @@ package com.quantumgarbage.screenshotsettings.util.getters;
 
 
 import com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient;
-import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsConfig;
 import com.quantumgarbage.screenshotsettings.integrations.ShaderIntegration;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -83,7 +82,7 @@ public class GameMeta {
     }
 
     public static String getVersion(final MinecraftClient client) {
-        return client.getGame().getVersion().getName();
+        return client.getGameVersion();
     }
 
     public static String timedate() {

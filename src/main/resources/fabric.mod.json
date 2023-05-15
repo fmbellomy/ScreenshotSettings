@@ -27,14 +27,14 @@
     "screenshotsettings.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.14.10",
+    "fabricloader": ">=0.14.19",
     "fabric-api": "*",
-    "minecraft": "~1.19",
-    "yet-another-config-lib": ">=1.7.1",
-    "modmenu": ">=4.1",
+    "minecraft": "1.19.4",
+    "yet-another-config-lib": ">=2.4.2",
+    "modmenu": ">=6.2.2",
     "java": ">=17"
   },
   "recommends": {
-    "iris": ">=1.4.3"
+    "iris": ">=1.6.3"
   }
 }
