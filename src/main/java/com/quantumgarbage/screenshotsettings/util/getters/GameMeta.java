@@ -3,7 +3,6 @@ package com.quantumgarbage.screenshotsettings.util.getters;
 
 import com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient;
 import com.quantumgarbage.screenshotsettings.integrations.ShaderIntegration;
-import static com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient.LOGGER;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ServerInfo;
@@ -16,6 +15,8 @@ import net.minecraft.world.level.ServerWorldProperties;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import static com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient.LOGGER;
+
 public class GameMeta {
     public static String getCoordinatesMetadata(final MinecraftClient client) {
         final var p = client.player;
@@ -27,11 +28,10 @@ public class GameMeta {
     public static Vec3d getCoordinates(final ClientPlayerEntity p) {
         try {
             return p.getPos();
-        }
-        catch(NullPointerException e){
+        } catch (NullPointerException e) {
             LOGGER.error("Unable to get player coordinates. Did you try to take the screenshot before you finished loading in?");
             e.printStackTrace();
-            return new Vec3d(0,0,0);
+            return new Vec3d(0, 0, 0);
         }
     }
 
@@ -45,8 +45,7 @@ public class GameMeta {
             final ServerWorldProperties worldProperties = (ServerWorldProperties) client.getServer().getWorlds().iterator().next().getLevelProperties();
 
             return worldProperties.getLevelName();
-            }
-        catch(Exception e) {
+        } catch (Exception e) {
             com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient.LOGGER.error("Unable to get world name for a screenshot.\n" + e);
             return "Unable to determine world name.";
         }
@@ -59,8 +58,7 @@ public class GameMeta {
             final ServerInfo si = client.getCurrentServerEntry();
             assert si != null;
             return si.name;
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             LOGGER.error("Unable to get world name for a screenshot.\n" + e);
             return "Unable to determine world name.";
         }
@@ -111,7 +109,7 @@ public class GameMeta {
     public static HashMap<String, String> getMetadata(final MinecraftClient client) {
         final HashMap<String, String> meta = new HashMap<>();
         // make sure that metadata even is possible to obtain.
-        if(null == client.player || null == client.world){
+        if (null == client.player || null == client.world) {
             return meta;
         }
 

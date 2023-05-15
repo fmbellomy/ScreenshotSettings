@@ -2,13 +2,8 @@ package com.quantumgarbage.screenshotsettings.client;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-
 import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsConfig;
-
-import static net.minecraft.server.command.CommandManager.*;
-
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
@@ -16,7 +11,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
-
 import net.minecraft.client.util.ScreenshotRecorder;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
@@ -24,6 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+
+import static net.minecraft.server.command.CommandManager.argument;
+import static net.minecraft.server.command.CommandManager.literal;
 
 @Environment(EnvType.CLIENT)
 public class ScreenshotSettingsClient implements ClientModInitializer {
@@ -70,7 +67,7 @@ public class ScreenshotSettingsClient implements ClientModInitializer {
         if (context.getSource().isExecutedByPlayer()) {
             ScreenshotRecorder.saveScreenshot(
                     new File("."),
-                    client.getFramebuffer(), 
+                    client.getFramebuffer(),
                     context.getSource()::sendMessage
             );
         } else {

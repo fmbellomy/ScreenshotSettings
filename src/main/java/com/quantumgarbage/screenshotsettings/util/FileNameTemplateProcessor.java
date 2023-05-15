@@ -16,9 +16,9 @@ public class FileNameTemplateProcessor {
         nameBuilder.add("version", GameMeta.getVersion(client));
         nameBuilder.add("world", GameMeta.getWorldName(client));
         assert null != client.player;
-        nameBuilder.add("x", String.format("%.0f",GameMeta.getCoordinates(client.player).x));
-        nameBuilder.add("y", String.format("%.0f",GameMeta.getCoordinates(client.player).y));
-        nameBuilder.add("z", String.format("%.0f",GameMeta.getCoordinates(client.player).z));
+        nameBuilder.add("x", String.format("%.0f", GameMeta.getCoordinates(client.player).x));
+        nameBuilder.add("y", String.format("%.0f", GameMeta.getCoordinates(client.player).y));
+        nameBuilder.add("z", String.format("%.0f", GameMeta.getCoordinates(client.player).z));
         nameBuilder.add("shader", ShaderIntegration.getShaderNameNoExtension());
         nameBuilder.add("player", GameMeta.getPlayerName(client));
         return nameBuilder.render();

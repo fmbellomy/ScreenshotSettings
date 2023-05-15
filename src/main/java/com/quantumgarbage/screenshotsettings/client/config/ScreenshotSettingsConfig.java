@@ -12,18 +12,19 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
+
 @Config(name = "screenshotsettings")
 public class ScreenshotSettingsConfig implements ConfigData {
     private static final String templatingTooltip =
             """
-                    Available templates:
-                        <datetime> -> Minecraft's default screenshot naming format.
-                        <world> -> The name of the world in Single Player, and the name of the server in Multiplayer.
-                        <version> -> The version of Minecraft the screenshot was taken on. (Ex. 1.19.2)
-                        <x>, <y>, and <z> -> The respective coordinates of where the screenshot was taken.
-                        <shader> -> The active Shader pack. (requires Iris Shaders)
-                        <player> -> Your Minecraft username.
-            """;
+                            Available templates:
+                                <datetime> -> Minecraft's default screenshot naming format.
+                                <world> -> The name of the world in Single Player, and the name of the server in Multiplayer.
+                                <version> -> The version of Minecraft the screenshot was taken on. (Ex. 1.19.2)
+                                <x>, <y>, and <z> -> The respective coordinates of where the screenshot was taken.
+                                <shader> -> The active Shader pack. (requires Iris Shaders)
+                                <player> -> Your Minecraft username.
+                    """;
 
     // Change screenshot directory
     @ConfigEntry.Category("Screenshot Directory")
@@ -50,21 +51,21 @@ public class ScreenshotSettingsConfig implements ConfigData {
     @ConfigEntry.Category("Naming Scheme")
     public boolean useCustomScreenshotNamingSchema;
     public String screenshotNamingSchema;
-    public String getScreenshotDirectory(){
-        if(!this.useCustomScreenshotDirectory){
+
+    public String getScreenshotDirectory() {
+        if (!this.useCustomScreenshotDirectory) {
             return "./screenshots/";
-        }
-        else {
+        } else {
             return this.screenshotDirectory + "/";
         }
     }
 
     @Override
     public void validatePostLoad() throws ValidationException {
-        if(null == this.screenshotDirectory){
+        if (null == this.screenshotDirectory) {
             this.screenshotDirectory = "./screenshots";
         }
-        if(null == this.screenshotNamingSchema){
+        if (null == this.screenshotNamingSchema) {
             this.screenshotNamingSchema = "<datetime>";
         }
         ConfigData.super.validatePostLoad();
