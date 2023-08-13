@@ -103,7 +103,9 @@ public class ScreenshotSettingsConfig implements ConfigData {
                                 .action(((yaclScreen, buttonOption) -> {
                                     final String currentSetting = screenshotDirectory.pendingValue();
                                     final String newDir = TinyFileDialogs.tinyfd_selectFolderDialog("Select New Screenshots Directory", currentSetting);
-                                    screenshotDirectory.requestSet(newDir);
+                                    if (newDir != null) {
+                                        screenshotDirectory.requestSet(newDir);
+                                    }
                                 }))
                                 .controller((buttonOption) -> new ActionController(buttonOption, Text.of("Open File Dialog")))
                                 .build())
