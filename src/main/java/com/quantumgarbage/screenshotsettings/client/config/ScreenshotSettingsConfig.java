@@ -1,10 +1,9 @@
 package com.quantumgarbage.screenshotsettings.client.config;
 
 import com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient;
-import dev.isxander.yacl.api.*;
-import dev.isxander.yacl.gui.controllers.ActionController;
-import dev.isxander.yacl.gui.controllers.BooleanController;
-import dev.isxander.yacl.gui.controllers.string.StringController;
+import dev.isxander.yacl3.api.*;
+import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
+import dev.isxander.yacl3.api.controller.StringControllerBuilder;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
@@ -73,26 +72,26 @@ public class ScreenshotSettingsConfig implements ConfigData {
 
     public Screen createGui(final Screen parent) {
         final ScreenshotSettingsConfig INSTANCE = ScreenshotSettingsClient.CONFIG;
-        final Option<String> screenshotDirectory = Option.createBuilder(String.class)
+        final Option<String> screenshotDirectory = Option.<String>createBuilder()
                 .name(Text.of("Custom Screenshot Directory"))
-                .tooltip(Text.of("Where screenshots will be saved to, provided Use Custom Screenshot Directory is enabled."))
+                .description(OptionDescription.of(Text.of("Where screenshots will be saved to, provided Use Custom Screenshot Directory is enabled.")))
                 .binding(
                         "/screenshots",
                         () -> INSTANCE.screenshotDirectory,
                         dir -> INSTANCE.screenshotDirectory = dir
 
-                ).controller(StringController::new)
+                ).controller(StringControllerBuilder::create)
                 .build();
         final ConfigCategory dirConfig = ConfigCategory.createBuilder()
                 .name(Text.of("Screenshot Directory"))
-                .option(Option.createBuilder(boolean.class)
+                .option(Option.<Boolean>createBuilder()
                         .name(Text.of("Use Custom Screenshot Directory"))
-                        .tooltip(Text.of("Enabling this will set screenshots to be saved to the path specified in Custom Screenshot Directory"))
+                        .description(OptionDescription.of(Text.of("Enabling this will set screenshots to be saved to the path specified in Custom Screenshot Directory")))
                         .binding(
                                 false,
                                 () -> INSTANCE.useCustomScreenshotDirectory,
                                 val -> INSTANCE.useCustomScreenshotDirectory = val
-                        ).controller(BooleanController::new)
+                        ).controller(BooleanControllerBuilder::create)
                         .build())
                 .group(OptionGroup.createBuilder()
                         .name(Text.of("Screenshot Directory"))
@@ -107,96 +106,97 @@ public class ScreenshotSettingsConfig implements ConfigData {
                                         screenshotDirectory.requestSet(newDir);
                                     }
                                 }))
-                                .controller((buttonOption) -> new ActionController(buttonOption, Text.of("Open File Dialog")))
+                                .text(Text.of("Open File Chooser Dialog"))
+                                .description(OptionDescription.of(Text.of("Opens a graphical file explorer to choose a new directory to save screenshots to.")))
                                 .build())
                         .build())
                 .build();
         final ConfigCategory metadata = ConfigCategory.createBuilder()
                 .name(Text.of("Screenshot Metadata"))
-                .option(Option.createBuilder(boolean.class)
+                .option(Option.<Boolean>createBuilder()
                         .name(Text.of("Use Custom Metadata"))
-                        .tooltip(Text.of("Enable or Disable embedding relevant in-game data into your screenshots' metadata"))
+                        .description(OptionDescription.of(Text.of("Enable or Disable embedding relevant in-game data into your screenshots' metadata")))
                         .binding(
                                 false,
                                 () -> INSTANCE.useMetadata,
                                 val -> INSTANCE.useMetadata = val
-                        ).controller(BooleanController::new)
+                        ).controller(BooleanControllerBuilder::create)
                         .build())
                 .group(OptionGroup.createBuilder()
                         .name(Text.of("Screenshot Metadata"))
                         .collapsed(false)
-                        .option(Option.createBuilder(boolean.class)
+                        .option(Option.<Boolean>createBuilder()
                                 .name(Text.of("Include Coordinates"))
                                 .binding(
                                         false,
                                         () -> INSTANCE.coordinates,
                                         val -> INSTANCE.coordinates = val
-                                ).controller(BooleanController::new)
+                                ).controller(BooleanControllerBuilder::create)
                                 .build())
-                        .option(Option.createBuilder(boolean.class)
+                        .option(Option.<Boolean>createBuilder()
                                 .name(Text.of("Include World/Server Name"))
                                 .binding(
                                         false,
                                         () -> INSTANCE.worldName,
                                         val -> INSTANCE.worldName = val
-                                ).controller(BooleanController::new)
+                                ).controller(BooleanControllerBuilder::create)
                                 .build())
-                        .option(Option.createBuilder(boolean.class)
+                        .option(Option.<Boolean>createBuilder()
                                 .name(Text.of("Include World Seed"))
                                 .binding(
                                         false,
                                         () -> INSTANCE.seed,
                                         val -> INSTANCE.seed = val
-                                ).controller(BooleanController::new)
+                                ).controller(BooleanControllerBuilder::create)
                                 .build())
-                        .option(Option.createBuilder(boolean.class)
+                        .option(Option.<Boolean>createBuilder()
                                 .name(Text.of("Include Texture Pack"))
                                 .binding(
                                         false,
                                         () -> INSTANCE.resourcePacks,
                                         val -> INSTANCE.resourcePacks = val
-                                ).controller(BooleanController::new)
+                                ).controller(BooleanControllerBuilder::create)
                                 .build())
-                        .option(Option.createBuilder(boolean.class)
+                        .option(Option.<Boolean>createBuilder()
                                 .name(Text.of("Include Shader Pack (Requires Iris Shaders)"))
                                 .binding(
                                         false,
                                         () -> INSTANCE.shaderPack,
                                         val -> INSTANCE.shaderPack = val
-                                ).controller(BooleanController::new)
+                                ).controller(BooleanControllerBuilder::create)
                                 .build())
-                        .option(Option.createBuilder(boolean.class)
+                        .option(Option.<Boolean>createBuilder()
                                 .name(Text.of("Include Game Version"))
                                 .binding(
                                         false,
                                         () -> INSTANCE.mcVersion,
                                         val -> INSTANCE.mcVersion = val
-                                ).controller(BooleanController::new)
+                                ).controller(BooleanControllerBuilder::create)
                                 .build())
                         .build())
                 .build();
 
         final ConfigCategory screenshotNaming = ConfigCategory.createBuilder()
                 .name(Text.of("Screenshot Naming"))
-                .option(Option.createBuilder(boolean.class)
+                .option(Option.<Boolean>createBuilder()
                         .name(Text.of("Enable Custom Screenshot Naming"))
                         .binding(
                                 false,
                                 () -> INSTANCE.useCustomScreenshotNamingSchema,
                                 val -> INSTANCE.useCustomScreenshotNamingSchema = val
-                        ).controller(BooleanController::new)
+                        ).controller(BooleanControllerBuilder::create)
                         .build())
                 .group(OptionGroup.createBuilder()
                         .name(Text.of("Screenshot Naming Scheme"))
                         .collapsed(false)
-                        .option(Option.createBuilder(String.class)
+                        .option(Option.<String>createBuilder()
                                 .name(Text.of("Naming Schema"))
-                                .tooltip(Text.of(templatingTooltip))
+                                .description(OptionDescription.of(Text.of(templatingTooltip)))
                                 .binding(
                                         "<timedate>",
                                         () -> INSTANCE.screenshotNamingSchema,
                                         val -> INSTANCE.screenshotNamingSchema = val
-                                ).controller(StringController::new)
+                                ).controller(StringControllerBuilder::create)
                                 .build())
                         .build())
                 .build();
