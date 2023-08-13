@@ -42,13 +42,13 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     // cloth config for serializing/deserializing config data
-    modApi "me.shedaniel.cloth:cloth-config-fabric:10.0.96"
+    modApi "me.shedaniel.cloth:cloth-config-fabric:11.1.106"
     // Mod Menu
-    modApi "com.terraformersmc:modmenu:6.2.2"
+    modApi "com.terraformersmc:modmenu:7.2.1"
     // YetAnotherConfigLib
-    modImplementation "dev.isxander:yet-another-config-lib:2.4.2"
+    modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:3.0.3+1.20"
     // Iris Shaders integration
-    modImplementation "maven.modrinth:iris:1.6.3+1.19.4"
+    modImplementation "maven.modrinth:iris:1.6.5+1.20.1"
     // templating library for file naming system
     shadow(implementation('org.antlr:ST4:4.3.4'))
 

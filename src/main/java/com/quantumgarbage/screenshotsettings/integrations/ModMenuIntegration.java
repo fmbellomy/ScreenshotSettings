@@ -1,7 +1,6 @@
 package com.quantumgarbage.screenshotsettings.integrations;
 
 import com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient;
-import com.quantumgarbage.screenshotsettings.client.config.ScreenshotSettingsConfig;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 

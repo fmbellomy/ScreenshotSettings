@@ -1,8 +1,8 @@
 package com.quantumgarbage.screenshotsettings.integrations;
 
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.coderbot.iris.Iris;
+import net.fabricmc.loader.api.FabricLoader;
 import org.apache.commons.io.FilenameUtils;
 
 public class ShaderIntegration {
@@ -20,8 +20,7 @@ public class ShaderIntegration {
     public static String getShaderNameNoExtension() {
         if (irisPresent()) {
             return FilenameUtils.removeExtension(getShaderName());
-        }
-        else{
+        } else {
             return "Unknown Shader";
         }
     }
