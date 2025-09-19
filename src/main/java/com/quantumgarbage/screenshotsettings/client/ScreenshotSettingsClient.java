@@ -82,6 +82,7 @@ public class ScreenshotSettingsClient implements ClientModInitializer {
                     new File("."),
                     filename,
                     client.getFramebuffer(),
+                    1,
                     context.getSource()::sendMessage
             );
         } else {

@@ -1,7 +1,6 @@
 package com.quantumgarbage.screenshotsettings.integrations;
 
-
-import net.coderbot.iris.Iris;
+import net.irisshaders.iris.Iris;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.commons.io.FilenameUtils;
 

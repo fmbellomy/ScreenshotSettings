@@ -89,7 +89,7 @@ public class GameMeta {
         final StringBuilder base = new StringBuilder("[");
         final Iterator<ResourcePack> resourcePackIterator = client.getResourceManager().streamResourcePacks().iterator();
         while (resourcePackIterator.hasNext()) {
-            base.append(String.format("%s", resourcePackIterator.next().getName()));
+            base.append(String.format("%s", resourcePackIterator.next().getId()));
             if (resourcePackIterator.hasNext()) {
                 base.append(", ");
             }
