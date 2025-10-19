@@ -193,7 +193,7 @@ public class ScreenshotSettingsConfig implements ConfigData {
                                 .name(Text.of("Naming Schema"))
                                 .description(OptionDescription.of(Text.of(templatingTooltip)))
                                 .binding(
-                                        "<timedate>",
+                                        "<datetime>",
                                         () -> INSTANCE.screenshotNamingSchema,
                                         val -> INSTANCE.screenshotNamingSchema = val
                                 ).controller(StringControllerBuilder::create)
