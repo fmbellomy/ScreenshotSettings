@@ -76,7 +76,7 @@ public class ScreenshotSettingsConfig implements ConfigData {
                 .name(Text.of("Custom Screenshot Directory"))
                 .description(OptionDescription.of(Text.of("Where screenshots will be saved to, provided Use Custom Screenshot Directory is enabled.")))
                 .binding(
-                        "/screenshots",
+                        "screenshots",
                         () -> INSTANCE.screenshotDirectory,
                         dir -> INSTANCE.screenshotDirectory = dir
 

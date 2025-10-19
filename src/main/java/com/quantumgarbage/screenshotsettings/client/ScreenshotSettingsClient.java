@@ -9,18 +9,17 @@ import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.ScreenshotRecorder;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 
 @Environment(EnvType.CLIENT)
 public class ScreenshotSettingsClient implements ClientModInitializer {
@@ -38,56 +37,48 @@ public class ScreenshotSettingsClient implements ClientModInitializer {
     }
 
     private void registerScreenshotCommands() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> register(dispatcher));
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> register(dispatcher));
     }
 
-    private void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    private void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         // Believe me, I dislike this code duplication, but every single way of
         // "aliasing" that I attempted through brigadier
         // didn't work out so well.
         dispatcher.register(literal("screenshot")
-                .executes(this::takeScreenshot)
+                .executes(context -> takeScreenshot())
                 .then(argument("filename", StringArgumentType.string())
                         .executes(context ->
-                                takeScreenshot(context, StringArgumentType.getString(context, "filename"))
+                                takeScreenshot(StringArgumentType.getString(context, "filename"))
                         )
                 )
         );
         dispatcher.register(literal("ss")
-                .executes(this::takeScreenshot)
+                .executes( context ->takeScreenshot())
                 .then(argument("filename", StringArgumentType.string())
                         .executes(context ->
-                                takeScreenshot(context, StringArgumentType.getString(context, "filename"))
+                                takeScreenshot(StringArgumentType.getString(context, "filename"))
                         )
                 )
         );
     }
 
-    private int takeScreenshot(CommandContext<ServerCommandSource> context) {
-        if (context.getSource().isExecutedByPlayer()) {
-            ScreenshotRecorder.saveScreenshot(
-                    new File("."),
-                    client.getFramebuffer(),
-                    context.getSource()::sendMessage
-            );
-        } else {
-            context.getSource().sendMessage(Text.literal("This command can only be executed by players!"));
-        }
-        return 1;
+    private int takeScreenshot() {
+        client.execute(() -> ScreenshotRecorder.saveScreenshot(
+                new File("."),
+                client.getFramebuffer(),
+                message -> client.inGameHud.getChatHud().addMessage(message)
+        ));
+        return 0;
     }
 
-    private int takeScreenshot(CommandContext<ServerCommandSource> context, String filename) {
-        if (context.getSource().isExecutedByPlayer()) {
-            ScreenshotRecorder.saveScreenshot(
-                    new File("."),
-                    filename,
-                    client.getFramebuffer(),
-                    1,
-                    context.getSource()::sendMessage
-            );
-        } else {
-            context.getSource().sendMessage(Text.literal("This command can only be executed by players!"));
-        }
-        return 1;
+    private int takeScreenshot(String filename) {
+        client.execute(() -> ScreenshotRecorder.saveScreenshot(
+                new File("."),
+                filename,
+                client.getFramebuffer(),
+                1,
+                message -> client.inGameHud.getChatHud().addMessage(message)
+        ));
+        return 0;
     }
 }
