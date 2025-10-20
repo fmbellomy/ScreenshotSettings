@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.10-SNAPSHOT'
+    id 'fabric-loom' version '1.11.8'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
@@ -48,7 +48,8 @@ dependencies {
     // YetAnotherConfigLib
     modImplementation "dev.isxander:yet-another-config-lib:3.7.1+1.21.6-fabric"
     // Iris Shaders integration
-    modImplementation "maven.modrinth:iris:1.9.1+1.21.7-fabric"
+    modImplementation "maven.modrinth:iris:1.9.0+1.21.6-fabric"
+    modImplementation "maven.modrinth:sodium:mc1.21.6-0.6.13-fabric"
     // templating library for file naming system
     shadow(implementation('org.antlr:ST4:4.3.4'))
 
