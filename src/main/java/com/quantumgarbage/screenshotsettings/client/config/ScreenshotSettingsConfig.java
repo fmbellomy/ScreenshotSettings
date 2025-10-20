@@ -15,15 +15,25 @@ import org.lwjgl.util.tinyfd.TinyFileDialogs;
 @Config(name = "screenshotsettings")
 public class ScreenshotSettingsConfig implements ConfigData {
     private static final String templatingTooltip =
-            """
-                            Available templates:
-                                <datetime> -> Minecraft's default screenshot naming format.
-                                <world> -> The name of the world in Single Player, and the name of the server in Multiplayer.
-                                <version> -> The version of Minecraft the screenshot was taken on. (Ex. 1.19.2)
-                                <x>, <y>, and <z> -> The respective coordinates of where the screenshot was taken.
-                                <shader> -> The active Shader pack. (requires Iris Shaders)
-                                <player> -> Your Minecraft username.
-                    """;
+"""
+§l§3<datetime>§r
+    - Minecraft's default screenshot naming format.
+    
+§l§3<world>§r
+    - The name of the world in Single Player, and the name of the server in Multiplayer.
+
+§l§3<version>§r
+    - The version of Minecraft the screenshot was taken on. (Ex. 1.19.2)
+
+§l§3<x>, <y>, and <z>§r
+    - The respective coordinates of where the screenshot was taken.
+
+§l§3<shader>§r
+    - The active Shader pack. (requires Iris Shaders)
+
+§l§3<player>§r
+    - Your Minecraft username.
+""";
 
     // Change screenshot directory
     @ConfigEntry.Category("Screenshot Directory")
