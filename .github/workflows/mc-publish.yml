@@ -33,5 +33,6 @@ jobs:
             iris | suggests
           modrinth-id: M0QvZmyL
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-
+          curseforge-id: 720608
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}

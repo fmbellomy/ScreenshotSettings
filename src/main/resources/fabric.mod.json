@@ -10,11 +10,6 @@
   "license": "Apache-2.0",
   "icon": "assets/screenshotsettings/icon.png",
   "environment": "client",
-  "custom": {
-    "mc-publish": {
-      "quilt": true
-    }
-  },
   "entrypoints": {
     "client": [
       "com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient"
@@ -36,6 +31,7 @@
     "cloth-config": "*"
   },
   "recommends": {
-    "iris": ">=1.6.3"
+    "iris": ">=1.9.0",
+    "sodium":">=0.6.13"
   }
 }
