@@ -3,6 +3,7 @@ package com.quantumgarbage.screenshotsettings.util.getters;
 
 import com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient;
 import com.quantumgarbage.screenshotsettings.integrations.ShaderIntegration;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ServerInfo;
@@ -46,8 +47,8 @@ public class GameMeta {
 
             return worldProperties.getLevelName();
         } catch (Exception e) {
-            com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient.LOGGER.error("Unable to get world name for a screenshot.\n" + e);
-            return "Unable to determine world name.";
+            LOGGER.error("Unable to get world name for a screenshot.\n" + e);
+            return "Unknown World";
         }
 
 
@@ -60,7 +61,7 @@ public class GameMeta {
             return si.name;
         } catch (Exception e) {
             LOGGER.error("Unable to get world name for a screenshot.\n" + e);
-            return "Unable to determine world name.";
+            return "Unknown World";
         }
     }
 
@@ -89,7 +90,7 @@ public class GameMeta {
         final StringBuilder base = new StringBuilder("[");
         final Iterator<ResourcePack> resourcePackIterator = client.getResourceManager().streamResourcePacks().iterator();
         while (resourcePackIterator.hasNext()) {
-            base.append(String.format("%s", resourcePackIterator.next().getName()));
+            base.append(String.format("%s", resourcePackIterator.next().getId()));
             if (resourcePackIterator.hasNext()) {
                 base.append(", ");
             }
@@ -99,7 +100,7 @@ public class GameMeta {
     }
 
     public static String getVersion(final MinecraftClient client) {
-        return client.getGameVersion();
+        return SharedConstants.getGameVersion().name() + " " + client.getVersionType();
     }
 
     public static String timedate() {

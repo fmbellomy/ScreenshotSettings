@@ -93,7 +93,7 @@ windows to be able to see it.
 ### Viewing Metadata: CLI
 
 If you're comfortable using a command-line tool, you can use [ImageMagick](https://imagemagick.org/)'
-s `identify --verbose` command to see it.
+s `identify -verbose` command to see it.
 
 ImageMagick has releases for Windows, Mac, and Linux, and if you're on Linux chances are you already have it installed
 anyway.

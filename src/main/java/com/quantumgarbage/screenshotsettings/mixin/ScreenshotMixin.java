@@ -1,6 +1,5 @@
 package com.quantumgarbage.screenshotsettings.mixin;
 
-
 import com.quantumgarbage.screenshotsettings.client.ScreenshotSettingsClient;
 import com.quantumgarbage.screenshotsettings.util.FileNameTemplateProcessor;
 import com.quantumgarbage.screenshotsettings.util.PNGMetadataManipulator;
@@ -13,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -21,17 +19,26 @@ import java.nio.file.Path;
 import java.util.function.Consumer;
 
 @Mixin(ScreenshotRecorder.class)
-public class ScreenshotMixin {
+public abstract class ScreenshotMixin {
+
+    // method_68157 lambda (image) -> {File file2}
     @ModifyVariable(
-            method = "saveScreenshotInner",
+            method = "method_68157",
             at = @At("STORE"),
-            index = 5)
-    private static File directoryInject(final File f) {
+            ordinal = 1
+    )
+    private static File modifyScreenshotFolder(File original) {
         return new File(ScreenshotSettingsClient.CONFIG.screenshotDirectory);
     }
 
+    // Util.getIoWorkerExecutor().execute( method_22691 lambda )
+    @Inject(method = "method_22691", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"))
+    private static void onIoWorkerStart(NativeImage image, File file, Consumer<Text> consumer, CallbackInfo ci) {
+        PNGMetadataManipulator.attachMetadata(file, GameMeta.getMetadata(ScreenshotSettingsClient.client));
+    }
+
     @ModifyVariable(
-            method = "saveScreenshotInner",
+            method = "saveScreenshot(Ljava/io/File;Ljava/lang/String;Lnet/minecraft/client/gl/Framebuffer;ILjava/util/function/Consumer;)V",
             argsOnly = true,
             at = @At("HEAD"),
             index = 1
@@ -49,6 +56,10 @@ public class ScreenshotMixin {
         String tmp = filename;
         while (true) {
             final Path p = Path.of(dir + tmp + ".png");
+            final File f = p.toFile();
+            if(!f.getParentFile().mkdirs() && !f.getParentFile().exists()){
+                throw new IllegalStateException("Couldn't create dir: " + f.getParentFile());
+            }
             if (!Files.exists(p)) {
                 break;
             }
@@ -56,26 +67,5 @@ public class ScreenshotMixin {
             ++i;
         }
         return tmp + ".png";
-    }
-
-    // inject into the lambda in Util.getServiceWorker.execute()
-    // this is to create any necessary subdirectories for the screenshots.
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    @Inject(
-            method = "method_1661",
-            at = @At("HEAD"),
-            locals = LocalCapture.CAPTURE_FAILEXCEPTION
-    )
-    private static void createDirs(final NativeImage _nativeImage, final File file, final Consumer<Text> _consumer, final CallbackInfo _ci) {
-        file.getParentFile().mkdirs();
-    }
-
-    @Inject(
-            method = "method_1661",
-            at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 0),
-            locals = LocalCapture.CAPTURE_FAILEXCEPTION
-    )
-    private static void attachMetadata(final NativeImage nativeImage, final File file, final Consumer<Text> consumer, final CallbackInfo ci) {
-        PNGMetadataManipulator.attachMetadata(file, GameMeta.getMetadata(ScreenshotSettingsClient.client));
     }
 }
