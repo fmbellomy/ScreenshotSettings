@@ -56,6 +56,10 @@ public abstract class ScreenshotMixin {
         String tmp = filename;
         while (true) {
             final Path p = Path.of(dir + tmp + ".png");
+            final File f = p.toFile();
+            if(!f.getParentFile().mkdirs() && !f.getParentFile().exists()){
+                throw new IllegalStateException("Couldn't create dir: " + f.getParentFile());
+            }
             if (!Files.exists(p)) {
                 break;
             }
