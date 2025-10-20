@@ -12,16 +12,16 @@ jobs:
 
     steps:
       -   uses: actions/checkout@v2
-      -   name: Set up JDK 17
+      -   name: Set up JDK 21
           uses: actions/setup-java@v2
           with:
             distribution: 'temurin'
-            java-version: 17
+            java-version: 21
       -   name: Grant execute permission for gradlew
           run: chmod +x gradlew
           # I seriously shouldn't have to do this, but I'm at a loss with these failed GH actions at this point.
       -   name: Generate Gradle Wrapper
-          run: gradle wrapper --gradle-version 7.4
+          run: gradle wrapper --gradle-version 8.14
       -   name: Build with Gradle
           run: ./gradlew build
 
