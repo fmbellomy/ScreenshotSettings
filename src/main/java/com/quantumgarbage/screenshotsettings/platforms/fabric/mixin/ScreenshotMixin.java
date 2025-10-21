@@ -1,4 +1,5 @@
-package com.quantumgarbage.screenshotsettings.platforms.fabric.mixin;
+//? if fabric {
+/*package com.quantumgarbage.screenshotsettings.platforms.fabric.mixin;
 
 import com.quantumgarbage.screenshotsettings.platforms.fabric.client.ScreenshotSettingsClient;
 import com.quantumgarbage.screenshotsettings.util.PNGMetadataManipulator;
@@ -21,3 +22,5 @@ public abstract class ScreenshotMixin {
         PNGMetadataManipulator.attachMetadata(file, GameMeta.getMetadata(ScreenshotSettingsClient.client));
     }
 }
+
+*///? }
