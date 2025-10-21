@@ -1,0 +1,19 @@
+modLoader = "javafml"
+loaderVersion = "*"
+license = "LGPLv3"
+issueTrackerURL="https://AuthorExample/TempLate/issues"
+
+[[mods]]
+modId = "template"
+version = "${version}"
+displayName = "${name}"
+authors = "AuthorExample"
+description = ""
+logoFile = "assets/template/icon.png"
+logoBlur = false
+
+[[mixins]]
+config = "template-common.mixins.json"
+
+[[mixins]]
+config = "template-neoforge.mixins.json"

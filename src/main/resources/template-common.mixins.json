@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.example.template.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "client": [
+    "com.quantumgarbage.screenshotsettings.mixin.ExampleMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
