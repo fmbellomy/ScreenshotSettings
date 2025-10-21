@@ -23,6 +23,8 @@ architectury.common(stonecutter.tree.branches.mapNotNull {
 repositories {
     maven("https://maven.neoforged.net/releases/")
 
+    // kotlinforforge because apparently one of these next guys needs it
+    maven("https://thedarkcolour.github.io/KotlinForForge")
     // cloth config
     maven("https://maven.shedaniel.me/")
     // modmenu
@@ -38,26 +40,22 @@ repositories {
 }
 dependencies {
     minecraft("com.mojang:minecraft:$minecraft")
+    implementation("org.antlr:ST4:4.3.4")
+    includeInternal("org.antlr:ST4:4.3.4")
 
     if (loader == "fabric") {
         modImplementation("net.fabricmc:fabric-loader:${mod.dep("fabric_loader")}")
         mappings("net.fabricmc:yarn:$minecraft+build.${mod.dep("yarn_build")}:v2")
-        modImplementation("com.terraformersmc:modmenu:${mod.dep("modmenu_version")}")
+        modApi("com.terraformersmc:modmenu:${mod.dep("modmenu_version")}")
 
-        //some features (like automatic resource loading from non vanilla namespaces) work only with fabric API installed
-        //for example translations from assets/modid/lang/en_us.json won't be working, same stuff with textures
-        //but we keep runtime only to not accidentally depend on fabric's api, because it doesn't exist in neo/forge
         modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:${mod.dep("fabric_version")}")
 
-    }
-    if (loader == "forge") {
-        "forge"("net.minecraftforge:forge:${minecraft}-${mod.dep("forge_loader")}")
-        mappings("net.fabricmc:yarn:$minecraft+build.${mod.dep("yarn_build")}:v2")
+        modApi("me.shedaniel.cloth:cloth-config-fabric:${mod.dep("cloth_version")}")
+        modApi("dev.isxander:yet-another-config-lib:${mod.dep("yacl_version")}")
+        modImplementation("maven.modrinth:iris:${mod.dep("iris_version")}")
+        modImplementation("maven.modrinth:sodium:${mod.dep("sodium_version")}")
 
-        "io.github.llamalad7:mixinextras-forge:${mod.dep("mixin_extras")}".let {
-            implementation(it)
-            include(it)
-        }
+        modApi("dev.architectury:architectury-fabric:${mod.dep("architectury_api")}")
     }
     if (loader == "neoforge") {
         "neoForge"("net.neoforged:neoforge:${mod.dep("neoforge_loader")}")
@@ -67,22 +65,23 @@ dependencies {
                 mappings("dev.architectury:yarn-mappings-patch-neoforge:$it")
             }
         })
+
+        modApi("me.shedaniel.cloth:cloth-config-fabric:${mod.dep("cloth_version")}")
+        modApi("dev.isxander:yet-another-config-lib:${mod.dep("yacl_version")}")
+        modImplementation("maven.modrinth:iris:${mod.dep("iris_version")}")
+        modImplementation("maven.modrinth:sodium:${mod.dep("sodium_version")}")
+        modApi("dev.architectury:architectury-neoforge:${mod.dep("architectury_api")}")
+
     }
 }
 
 loom {
-    accessWidenerPath = rootProject.file("src/main/resources/template.accesswidener")
+    accessWidenerPath = rootProject.file("src/main/resources/screenshotsettings.accesswidener")
 
     decompilers {
         get("vineflower").apply { // Adds names to lambdas - useful for mixins
             options.put("mark-corresponding-synthetics", "1")
         }
-    }
-    if (loader == "forge") {
-        forge.mixinConfigs(
-            "template-common.mixins.json",
-            "template-forge.mixins.json",
-        )
     }
 }
 
@@ -114,6 +113,7 @@ publishMods {
         targets.forEach(minecraftVersions::add)
         if (loader == "fabric") {
             requires("fabric-api")
+            requires("architectury-api")
             optional("modmenu")
         }
     }
@@ -124,6 +124,7 @@ publishMods {
         targets.forEach(minecraftVersions::add)
         if (loader == "fabric") {
             requires("fabric-api")
+            requires("architectury-api")
             optional("modmenu")
         }
     }
@@ -184,13 +185,6 @@ tasks.processResources {
         "name" to mod.name,
         "version" to mod.version,
         "minecraft" to mod.prop("mc_dep_fabric")
-    )
-    properties(
-        listOf("META-INF/mods.toml", "pack.mcmeta"),
-        "id" to mod.id,
-        "name" to mod.name,
-        "version" to mod.version,
-        "minecraft" to mod.prop("mc_dep_forgelike")
     )
     properties(
         listOf("META-INF/neoforge.mods.toml", "pack.mcmeta"),

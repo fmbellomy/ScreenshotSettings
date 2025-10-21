@@ -5,12 +5,11 @@ import org.slf4j.LoggerFactory;
 
 public class ScreenshotSettingsInit
 {
-	public static final String MODID = "template";
-	public static final Logger LOGGER = LoggerFactory.getLogger("Template");
+	public static final String MODID = "assets/screenshotsettings";
+	public static final Logger LOGGER = LoggerFactory.getLogger("ScreenshotSettings");
 	public static ModPlatform PLATFORM = null;
 
 	public static void entrypoint(ModPlatform platform) {
 		ScreenshotSettingsInit.PLATFORM = platform;
-		LOGGER.info("Started mod in %s loader".formatted(ScreenshotSettingsInit.PLATFORM.getModloader()));
-	}
+    }
 }

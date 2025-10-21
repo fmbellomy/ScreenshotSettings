@@ -5,16 +5,16 @@
   "name": "${name}",
   "description": "",
   "authors": [
-    "AuthorExample"
+    "esoterica"
   ],
   "contact": {
   },
-  "license": "LGPLv3",
-  "icon": "assets/${id}/icon.png",
-  "environment": "*",
+  "license": "Apache-2.0",
+  "icon": "assets/screenshotsettings/icon.png",
+  "environment": "client",
   "entrypoints": {
-    "main": [
-      "com.quantumgarbage.screenshotsettings.platforms.fabric.TempLateFabric"
+    "client": [
+      "com.quantumgarbage.screenshotsettings.platforms.fabric.client.ScreenshotSettingsClient"
     ],
     "modmenu": [
       "com.quantumgarbage.screenshotsettings.platforms.fabric.ModMenuIntegration"

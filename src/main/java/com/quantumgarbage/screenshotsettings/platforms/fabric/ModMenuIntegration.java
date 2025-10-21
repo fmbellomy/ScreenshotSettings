@@ -1,13 +1,14 @@
 //? if fabric {
 package com.quantumgarbage.screenshotsettings.platforms.fabric;
 
+import com.quantumgarbage.screenshotsettings.platforms.fabric.client.ScreenshotSettingsClient;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import com.quantumgarbage.screenshotsettings.ConfigScreen;
 
 public class ModMenuIntegration implements ModMenuApi {
+    @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return ConfigScreen::createConfigScreen;
+        return parent -> ScreenshotSettingsClient.CONFIG.createGui(parent);
     }
 }
 //?}

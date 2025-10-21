@@ -11,18 +11,8 @@ It is based on my CustomCursor project
 To change versions check settings.gradle.kts
 Currently default versions are these,
 but you can easily add other versions if you need that
-- 1.20.1, fabric, lexforge
-- 1.20.4, fabric, neoforge
+- 1.20.1, fabric
 - 1.21.1, fabric, neoforge
-- 1.21.3, fabric, neoforge
-- 1.21.4, fabric, neoforge
-- 1.21.5, fabric, neoforge
-
-You can use c# script to automatically change all template names.
-Open RenameTemplate.cs, change names in replacements array and run "dotnet run" in this directory
-I would highly recommend to do this before opening project in your IDE, and then remove all c# related files from project
-(obj and bin folders, .csproj and script itself). Also you can remove c# stuff from .gitignore (there is comment for that)
-
 
 ## Build tools usage
 
