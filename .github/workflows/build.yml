@@ -50,5 +50,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Artifacts
-          path: build/libs/
+          path:
+            versions/1.20.1-fabric/build/libs/
+            versions/1.21.1-fabric/build/libs/
+            versions/1.21.1-neoforge/build/libs/
+
+
 
