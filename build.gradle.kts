@@ -85,19 +85,14 @@ loom {
     }
 }
 
-
-val localProperties = Properties()
-val localPropertiesFile = rootProject.file("local.properties")
-if (localPropertiesFile.exists()) {
-    localProperties.load(localPropertiesFile.inputStream())
-}
 publishMods {
-    val modrinthToken = localProperties.getProperty("publish.modrinthToken", "")
-    val curseforgeToken = localProperties.getProperty("publish.curseforgeToken", "")
+    var modrinthToken = System.getenv("MODRINTH_TOKEN")
+    var curseforgeToken = System.getenv("CURSEFORGE_TOKEN")
+
 
 
     file = project.tasks.remapJar.get().archiveFile
-    dryRun = modrinthToken == null || curseforgeToken == null
+    dryRun = modrinthToken == "" || curseforgeToken == ""
 
     displayName = "${mod.name} ${loader.replaceFirstChar { it.uppercase() }} ${property("mod.mc_title")}-${mod.version}"
     version = mod.version
@@ -107,25 +102,28 @@ publishMods {
     modLoaders.add(loader)
 
     val targets = property("mod.mc_targets").toString().split(' ')
-    modrinth {
-        projectId = property("publish.modrinth").toString()
-        accessToken = modrinthToken
-        targets.forEach(minecraftVersions::add)
-        if (loader == "fabric") {
-            requires("fabric-api")
-            requires("architectury-api")
-            optional("modmenu")
-        }
-    }
 
-    curseforge {
-        projectId = property("publish.curseforge").toString()
-        accessToken = curseforgeToken.toString()
-        targets.forEach(minecraftVersions::add)
-        if (loader == "fabric") {
-            requires("fabric-api")
-            requires("architectury-api")
-            optional("modmenu")
+    if(dryRun.get()) {
+        modrinth {
+            projectId = property("publish.modrinth").toString()
+            accessToken = modrinthToken
+            targets.forEach(minecraftVersions::add)
+            if (loader == "fabric") {
+                requires("fabric-api")
+                requires("architectury-api")
+                optional("modmenu")
+            }
+        }
+
+        curseforge {
+            projectId = property("publish.curseforge").toString()
+            accessToken = curseforgeToken.toString()
+            targets.forEach(minecraftVersions::add)
+            if (loader == "fabric") {
+                requires("fabric-api")
+                requires("architectury-api")
+                optional("modmenu")
+            }
         }
     }
 }
