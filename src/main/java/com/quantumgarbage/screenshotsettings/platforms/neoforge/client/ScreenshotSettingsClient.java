@@ -1,5 +1,5 @@
 //? if neoforge {
-/*package com.quantumgarbage.screenshotsettings.platforms.neoforge.client;
+package com.quantumgarbage.screenshotsettings.platforms.neoforge.client;
 
 import com.quantumgarbage.screenshotsettings.Config;
 
@@ -35,4 +35,4 @@ public class ScreenshotSettingsClient{
     }
 
 }
-*///?}
+//?}

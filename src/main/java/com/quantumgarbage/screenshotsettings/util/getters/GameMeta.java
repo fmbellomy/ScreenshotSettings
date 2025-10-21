@@ -1,15 +1,14 @@
 package com.quantumgarbage.screenshotsettings.util.getters;
 
 //? if fabric {
-import com.quantumgarbage.screenshotsettings.platforms.fabric.client.ScreenshotSettingsClient;
+/*import com.quantumgarbage.screenshotsettings.platforms.fabric.client.ScreenshotSettingsClient;
 import static com.quantumgarbage.screenshotsettings.platforms.fabric.client.ScreenshotSettingsClient.LOGGER;
-//?} else {
-/*import com.quantumgarbage.screenshotsettings.platforms.neoforge.client.ScreenshotSettingsClient;
+*///?} else {
+import com.quantumgarbage.screenshotsettings.platforms.neoforge.client.ScreenshotSettingsClient;
 import static com.quantumgarbage.screenshotsettings.platforms.neoforge.client.ScreenshotSettingsClient.LOGGER;
-*///?}
+//?}
 import com.quantumgarbage.screenshotsettings.integrations.Shaders;
 import dev.architectury.platform.Platform;
-import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ServerInfo;
@@ -96,10 +95,10 @@ public class GameMeta {
         while (resourcePackIterator.hasNext()) {
             base.append(String.format("%s", resourcePackIterator.next()
                     //? if <1.21 {
-                    .getName()));
-                    //?} elif =1.21.1 {
-                    /*.getId()));
-                    *///?}
+                    /*.getName()));
+                    *///?} elif =1.21.1 {
+                    .getId()));
+                    //?}
             if (resourcePackIterator.hasNext()) {
                 base.append(", ");
             }

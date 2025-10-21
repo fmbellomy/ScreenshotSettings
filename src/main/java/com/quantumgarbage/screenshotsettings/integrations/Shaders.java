@@ -1,11 +1,9 @@
 package com.quantumgarbage.screenshotsettings.integrations;
 //? if neoforge {
-/*import com.quantumgarbage.screenshotsettings.platforms.neoforge.ScreenshotSettingsNeoForge;
 import net.neoforged.fml.ModList;
-import net.neoforged.neoforge.common.NeoForge;
-*///?} else {
-import net.fabricmc.loader.api.FabricLoader;
-//?}
+//?} else {
+/*import net.fabricmc.loader.api.FabricLoader;
+*///?}
 
 import net.irisshaders.iris.Iris;
 import org.apache.commons.io.FilenameUtils;
@@ -13,10 +11,10 @@ import org.apache.commons.io.FilenameUtils;
 public class Shaders {
     public static boolean irisPresent() {
         //? if fabric {
-        return FabricLoader.getInstance().isModLoaded("iris");
-        //?} else {
-        /*return ModList.get().isLoaded("iris");
-        *///?}
+        /*return FabricLoader.getInstance().isModLoaded("iris");
+        *///?} else {
+        return ModList.get().isLoaded("iris");
+        //?}
     }
 
     public static String getShaderName() {

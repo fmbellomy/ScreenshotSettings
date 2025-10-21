@@ -1,9 +1,9 @@
 package com.quantumgarbage.screenshotsettings;
 //? if fabric {
-import com.quantumgarbage.screenshotsettings.platforms.fabric.client.ScreenshotSettingsClient;
-//?} else {
-/*import com.quantumgarbage.screenshotsettings.platforms.neoforge.client.ScreenshotSettingsClient;
-*///?}
+/*import com.quantumgarbage.screenshotsettings.platforms.fabric.client.ScreenshotSettingsClient;
+*///?} else {
+import com.quantumgarbage.screenshotsettings.platforms.neoforge.client.ScreenshotSettingsClient;
+//?}
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.StringControllerBuilder;
@@ -20,7 +20,7 @@ public class Config implements ConfigData {
             """
             §l§3<datetime>§r
                 - Minecraft's default screenshot naming format.
-                
+            
             §l§3<world>§r
                 - The name of the world in Single Player, and the name of the server in Multiplayer.
             

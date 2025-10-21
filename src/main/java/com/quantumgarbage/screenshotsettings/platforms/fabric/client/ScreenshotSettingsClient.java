@@ -1,5 +1,5 @@
 //? if fabric {
-package com.quantumgarbage.screenshotsettings.platforms.fabric.client;
+/*package com.quantumgarbage.screenshotsettings.platforms.fabric.client;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -79,4 +79,4 @@ public class ScreenshotSettingsClient implements ClientModInitializer {
         return 0;
     }
 }
-//?}
+*///?}

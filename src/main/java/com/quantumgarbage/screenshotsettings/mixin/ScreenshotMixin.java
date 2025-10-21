@@ -1,26 +1,18 @@
 package com.quantumgarbage.screenshotsettings.mixin;
 //? if fabric {
-import com.quantumgarbage.screenshotsettings.platforms.fabric.client.ScreenshotSettingsClient;
-//?} else {
-/*import com.quantumgarbage.screenshotsettings.platforms.neoforge.client.ScreenshotSettingsClient;
-*///?}
+/*import com.quantumgarbage.screenshotsettings.platforms.fabric.client.ScreenshotSettingsClient;
+*///?} else {
+import com.quantumgarbage.screenshotsettings.platforms.neoforge.client.ScreenshotSettingsClient;
+//?}
 import com.quantumgarbage.screenshotsettings.util.FileNameTemplateProcessor;
-import com.quantumgarbage.screenshotsettings.util.PNGMetadataManipulator;
-import com.quantumgarbage.screenshotsettings.util.getters.GameMeta;
-import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.util.ScreenshotRecorder;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.function.Consumer;
+
 
 @Mixin(ScreenshotRecorder.class)
 public abstract class ScreenshotMixin {

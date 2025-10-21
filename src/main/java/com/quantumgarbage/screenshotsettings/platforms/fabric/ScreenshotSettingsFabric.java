@@ -1,5 +1,5 @@
 //? if fabric {
-package com.quantumgarbage.screenshotsettings.platforms.fabric;
+/*package com.quantumgarbage.screenshotsettings.platforms.fabric;
 
 import com.quantumgarbage.screenshotsettings.ModPlatform;
 import net.fabricmc.api.ModInitializer;
@@ -24,4 +24,4 @@ public class ScreenshotSettingsFabric implements ModInitializer {
 		}
 	}
 }
-//?}
+*///?}

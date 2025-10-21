@@ -1,10 +1,10 @@
 package com.quantumgarbage.screenshotsettings.util;
 
 //? if fabric {
-import com.quantumgarbage.screenshotsettings.platforms.fabric.client.ScreenshotSettingsClient;
-//?} else {
-/*import com.quantumgarbage.screenshotsettings.platforms.neoforge.client.ScreenshotSettingsClient;
-*///?}
+/*import com.quantumgarbage.screenshotsettings.platforms.fabric.client.ScreenshotSettingsClient;
+*///?} else {
+import com.quantumgarbage.screenshotsettings.platforms.neoforge.client.ScreenshotSettingsClient;
+//?}
 import com.quantumgarbage.screenshotsettings.integrations.Shaders;
 import com.quantumgarbage.screenshotsettings.util.getters.GameMeta;
 import net.minecraft.client.MinecraftClient;
