@@ -19,9 +19,9 @@ jobs:
         with:
           java-version: 21
           distribution: 'microsoft'
+          cache: 'gradle'
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
-
       - name: set 1.20.1-fabric
         run: ./gradlew "Set active project to 1.20.1-fabric"
       - name: publish 1.20.1-fabric
