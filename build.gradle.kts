@@ -103,7 +103,7 @@ publishMods {
 
     val targets = property("mod.mc_targets").toString().split(' ')
 
-    if(dryRun.get()) {
+
         modrinth {
             projectId = property("publish.modrinth").toString()
             accessToken = modrinthToken
@@ -117,7 +117,7 @@ publishMods {
 
         curseforge {
             projectId = property("publish.curseforge").toString()
-            accessToken = curseforgeToken.toString()
+            accessToken = curseforgeToken
             targets.forEach(minecraftVersions::add)
             if (loader == "fabric") {
                 requires("fabric-api")
@@ -126,7 +126,7 @@ publishMods {
             }
         }
     }
-}
+
 
 java {
     withSourcesJar()
