@@ -37,7 +37,7 @@ jobs:
       - name: build 1.21.1-neoforge
         run: ./gradlew :1.21.1-neoforge:build
 
-      - name: publish to cf and modrinth
+      - name: publish fabric 1.20.1
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
@@ -48,18 +48,43 @@ jobs:
           files: |
             versions/1.20.1-fabric/build/libs/!(*-@(dev|sources|javadoc)).jar
             versions/1.20.1-fabric/build/libs/*-@(dev|sources|javadoc).jar
-            versions/1.21.1-fabric/build/libs/!(*-@(dev|sources|javadoc)).jar
-            versions/1.21.1-fabric/build/libs/*-@(dev|sources|javadoc).jar
-            versions/1.21.1-neoforge/build/libs/!(*-@(dev|sources|javadoc)).jar
-            versions/1.21.1-neoforge/build/libs/*-@(dev|sources|javadoc).jar
-          version-type: beta
+          version-type: release
           loaders:
             fabric
-            neoforge
           game-versions: |
             1.20.1
+      - name: publish fabric 1.21.1
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          modrinth-id: M0QvZmyL
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          curseforge-id: 720608
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            versions/1.21.1-fabric/build/libs/!(*-@(dev|sources|javadoc)).jar
+            versions/1.21.1-fabric/build/libs/*-@(dev|sources|javadoc).jar
+          version-type: release
+          loaders:
+            fabric
+          game-versions: |
             [1.21,1.21.1]
-          
+      - name: publish neoforge 1.21.1
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          modrinth-id: M0QvZmyL
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          curseforge-id: 720608
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            versions/1.21.1-neoforge/build/libs/!(*-@(dev|sources|javadoc)).jar
+            versions/1.21.1-neoforge/build/libs/*-@(dev|sources|javadoc).jar
+          version-type: release
+          loaders:
+            neoforge
+          game-versions: |
+            [1.21,1.21.1]
 
       - name: capture build artifacts
         uses: actions/upload-artifact@v4
